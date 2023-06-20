@@ -2,7 +2,7 @@ import { Field } from "components/field";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -38,6 +38,7 @@ const SignUpPage = () => {
     formState: { errors, isValid, isSubmitting },
     watch,
   } = useForm({});
+  const [togglePassword, setTogglePassword] = useState(false);
   const handleSignUp = (values) => {
     console.log(values);
   };
@@ -68,12 +69,20 @@ const SignUpPage = () => {
           <Field>
             <Label htmlFor="password">Password</Label>
             <Input
-              type="password"
+              type={togglePassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
               control={control}
             >
-              <IconEyeClose className="input-icon"></IconEyeClose>
+              {!togglePassword ? (
+                <IconEyeClose
+                  onClick={() => setTogglePassword(true)}
+                ></IconEyeClose>
+              ) : (
+                <IconEyeOpen
+                  onClick={() => setTogglePassword(false)}
+                ></IconEyeOpen>
+              )}
             </Input>
           </Field>
         </form>
