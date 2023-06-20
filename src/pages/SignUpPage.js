@@ -4,9 +4,12 @@ import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Input } from "components/input";
 import { Label } from "components/label";
 import { LoadingSpinner } from "components/loading";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -33,17 +36,48 @@ const SignUpPageStyles = styled.div`
   }
 `;
 
+const schema = yup.object({
+  fullname: yup.string().required("Please enter your fullname"),
+  email: yup
+    .string()
+    .email("Please enter valid emaill address")
+    .required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters or greater")
+    .required("Please enter your password"),
+});
+
 const SignUpPage = () => {
   const {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     watch,
-  } = useForm({});
+    reset,
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
   const [togglePassword, setTogglePassword] = useState(false);
   const handleSignUp = (values) => {
     console.log(values);
+    if (!isValid) return;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 5000);
+    });
   };
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0) {
+      toast.error(arrErrors[0].message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
+  }, [errors]);
   return (
     <SignUpPageStyles>
       <div className="container">
@@ -90,8 +124,8 @@ const SignUpPage = () => {
           <Button
             type="submit"
             style={{ maxWidth: 250, margin: "0 auto" }}
-            disabled={false}
-            isLoading={false}
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
           >
             Sign Up
           </Button>
