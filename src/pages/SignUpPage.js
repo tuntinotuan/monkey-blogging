@@ -1,7 +1,9 @@
+import { Button } from "components/button";
 import { Field } from "components/field";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Input } from "components/input";
 import { Label } from "components/label";
+import { LoadingSpinner } from "components/loading";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -85,6 +87,14 @@ const SignUpPage = () => {
               )}
             </Input>
           </Field>
+          <Button
+            type="submit"
+            style={{ maxWidth: 250, margin: "0 auto" }}
+            disabled={false}
+            isLoading={false}
+          >
+            Sign Up
+          </Button>
         </form>
       </div>
     </SignUpPageStyles>
