@@ -1,3 +1,4 @@
+import { Label } from "components/label";
 import React from "react";
 import styled from "styled-components";
 
@@ -20,11 +21,11 @@ const SignUpPageStyles = styled.div`
     align-items: flex-start;
     row-gap: 20px;
   }
-  .label {
+  /* .label {
     color: ${(props) => props.theme.grayDark};
     font-weight: 600;
     cursor: pointer;
-  }
+  } */
   .input {
     width: 100%;
     padding: 20px;
@@ -58,9 +59,7 @@ const SignUpPage = () => {
         <h1 className="heading">Monkey Blogging</h1>
         <form action="" className="form">
           <div className="field">
-            <label htmlFor="fullname" className="label">
-              Fullname
-            </label>
+            <Label htmlFor="fullname">Fullname</Label>
             <input
               id="fullname"
               type="text"
