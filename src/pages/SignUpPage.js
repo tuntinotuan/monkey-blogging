@@ -1,3 +1,4 @@
+import { Field } from "components/field";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Input } from "components/input";
 import { Label } from "components/label";
@@ -18,12 +19,12 @@ const SignUpPageStyles = styled.div`
     font-size: 40px;
     margin-bottom: 60px;
   }
-  .field {
+  /* .field {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     row-gap: 20px;
-  }
+  } */
   .form {
     max-width: 600px;
     margin: 0 auto;
@@ -46,17 +47,35 @@ const SignUpPage = () => {
         <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
         <h1 className="heading">Monkey Blogging</h1>
         <form action="" className="form" onSubmit={handleSubmit(handleSignUp)}>
-          <div className="field">
+          <Field>
             <Label htmlFor="fullname">Fullname</Label>
             <Input
               type="text"
               name="fullname"
               placeholder="Enter your fullname"
               control={control}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="email">Email address</Label>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              control={control}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              control={control}
             >
               <IconEyeClose className="input-icon"></IconEyeClose>
             </Input>
-          </div>
+          </Field>
         </form>
       </div>
     </SignUpPageStyles>
