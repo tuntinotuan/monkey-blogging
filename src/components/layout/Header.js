@@ -1,6 +1,8 @@
 import { Button } from "components/button";
 import { IconSearch } from "components/icon";
 import { useAuth } from "contexts/auth-context";
+import { auth } from "firebase-app/firebase-config";
+import { signOut } from "firebase/auth";
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -69,6 +71,10 @@ function getLastName(name) {
 
 const Header = () => {
   const { userInfo } = useAuth();
+  const handleSignOut = () => {
+    signOut(auth);
+    console.log("Sign out successfully!!!");
+  };
   return (
     <HeaderStyles>
       <div className="container">
@@ -100,11 +106,14 @@ const Header = () => {
               Sign Up
             </Button>
           ) : (
-            <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <span>Welcome to, </span>
               <strong className="text-primary">
                 {getLastName(userInfo?.displayName)}
               </strong>
+              <Button onClick={handleSignOut} kind="secondary" height="56px">
+                Sign out
+              </Button>
             </div>
           )}
         </div>
