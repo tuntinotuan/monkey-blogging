@@ -1,7 +1,7 @@
 import { Button } from "components/button";
 import { Field } from "components/field";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
-import { Input } from "components/input";
+import { Input, InputPasswordToggle } from "components/input";
 import { Label } from "components/label";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -98,22 +98,7 @@ const SignUpPage = () => {
         </Field>
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            type={togglePassword ? "text" : "password"}
-            name="password"
-            placeholder="Enter your password"
-            control={control}
-          >
-            {!togglePassword ? (
-              <IconEyeClose
-                onClick={() => setTogglePassword(true)}
-              ></IconEyeClose>
-            ) : (
-              <IconEyeOpen
-                onClick={() => setTogglePassword(false)}
-              ></IconEyeOpen>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           You already have an account? <NavLink to="/sign-in">Sign in</NavLink>

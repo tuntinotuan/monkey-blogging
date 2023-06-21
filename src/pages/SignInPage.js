@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "components/label";
-import { Input } from "components/input";
+import { Input, InputPasswordToggle } from "components/input";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Button } from "components/button";
 import { toast } from "react-toastify";
@@ -36,7 +36,6 @@ const SignInPage = () => {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
-  const [togglePassword, setTogglePassword] = useState(false);
   const handleSignIn = async (values) => {
     if (!isValid) return;
     const credentials = await signInWithEmailAndPassword(
@@ -76,22 +75,7 @@ const SignInPage = () => {
         </Field>
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            name="password"
-            type={togglePassword ? "text" : "password"}
-            placeholder="Please enter your password"
-            control={control}
-          >
-            {!togglePassword ? (
-              <IconEyeClose
-                onClick={() => setTogglePassword(true)}
-              ></IconEyeClose>
-            ) : (
-              <IconEyeOpen
-                onClick={() => setTogglePassword(false)}
-              ></IconEyeOpen>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           You haven't an account? <NavLink to="/sign-up">Register</NavLink>
