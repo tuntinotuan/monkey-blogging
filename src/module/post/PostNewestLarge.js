@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
 const PostNewestLargeStyles = styled.div`
   .post {
     &-image {
@@ -14,13 +16,6 @@ const PostNewestLargeStyles = styled.div`
       }
     }
     &-category {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 8px;
-      color: #6b6b6b;
-      font-size: 14px;
-      font-weight: 600;
-      background-color: #f3edff;
       margin-bottom: 16px;
     }
     &-info {
@@ -39,10 +34,6 @@ const PostNewestLargeStyles = styled.div`
       border-radius: 100rem;
     }
     &-title {
-      font-weight: bold;
-      line-height: 1.5;
-      display: block;
-      font-size: 22px;
       margin-bottom: 12px;
     }
   }
@@ -57,10 +48,10 @@ const PostNewestLarge = () => {
           alt=""
         />
       </div>
-      <div className="post-category">Kiến thức</div>
-      <h3 className="post-title">
+      <PostCategory>Kiến thức</PostCategory>
+      <PostTitle size="big">
         Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-      </h3>
+      </PostTitle>
       <div className="post-info">
         <span className="post-time">Mar 23</span>
         <span className="post-dot"></span>
