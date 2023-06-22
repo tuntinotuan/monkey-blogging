@@ -4,19 +4,13 @@ import { Dropdown } from "components/dropdown";
 import { Field } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 import styled from "styled-components";
 import { postStatus } from "utils/constants";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
 import ImageUpload from "components/image/ImageUpload";
+import useFirebaseImage from "hooks/useFirebaseImage";
 
 const PostAddNewStyles = styled.div``;
 
@@ -31,7 +25,7 @@ const PostAddNew = () => {
     },
   });
   const watchStatus = watch("status");
-  const watchCategory = watch("category");
+  // const watchCategory = watch("category");
   const addPostHandler = async (values) => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
@@ -39,61 +33,8 @@ const PostAddNew = () => {
     console.log(cloneValues);
     // handleUploadImage(cloneValues.image);
   };
-  const [progress, setProgress] = useState(0);
-  const [image, setImage] = useState("");
-  const handleUploadImage = (file) => {
-    const storage = getStorage();
-    const storageRef = ref(storage, "images/" + file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progressPercent =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(progressPercent);
-        // console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-            console.log("default in Switch handleUploadImage()");
-        }
-      },
-      (error) => {
-        console.log("Error", error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setImage(downloadURL);
-        });
-      }
-    );
-  };
-  const onSelectImage = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setValue("image_name", file.name);
-    handleUploadImage(file);
-  };
-  const handleDeleteImage = () => {
-    const storage = getStorage();
-    const imageRef = ref(storage, "images/" + getValues("image_name"));
-    deleteObject(imageRef)
-      .then(() => {
-        console.log("Remove image successfully");
-        setImage("");
-        setProgress(0);
-      })
-      .catch((error) => {
-        console.log("handleDeleteImage ~ error", error);
-        console.log("Can not delete image");
-      });
-  };
+  const { image, progress, handleSelectImage, handleDeleteImage } =
+    useFirebaseImage(setValue, getValues);
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -120,7 +61,7 @@ const PostAddNew = () => {
           <Field>
             <Label>Image</Label>
             <ImageUpload
-              onChange={onSelectImage}
+              onChange={handleSelectImage}
               handleDeleteImage={handleDeleteImage}
               className="h-[250px]"
               progress={progress}
