@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { postStatus } from "utils/constants";
 import ImageUpload from "components/image/ImageUpload";
 import useFirebaseImage from "hooks/useFirebaseImage";
+import Toggle from "components/toggle/Toggle";
 
 const PostAddNewStyles = styled.div``;
 
@@ -22,9 +23,11 @@ const PostAddNew = () => {
       slug: "",
       status: 2,
       category: "",
+      hot: false,
     },
   });
   const watchStatus = watch("status");
+  const watchHot = watch("hot");
   // const watchCategory = watch("category");
   const addPostHandler = async (values) => {
     const cloneValues = { ...values };
@@ -113,7 +116,13 @@ const PostAddNew = () => {
               <Dropdown.Option>Developer</Dropdown.Option>
             </Dropdown>
           </Field>
-          <Field></Field>
+          <Field>
+            <Label>Feature post</Label>
+            <Toggle
+              on={watchHot === true}
+              onClick={() => setValue("hot", !watchHot)}
+            ></Toggle>
+          </Field>
         </div>
         <Button type="submit" className="mx-auto">
           Add new post
