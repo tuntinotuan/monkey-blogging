@@ -4,13 +4,23 @@ import { Dropdown } from "components/dropdown";
 import { Field } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import slugify from "slugify";
 import styled from "styled-components";
+import { postStatus } from "utils/constants";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import ImageUpload from "components/image/ImageUpload";
+
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
-  const { control, watch, setValue } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
       status: "",
@@ -19,11 +29,58 @@ const PostAddNew = () => {
   });
   const watchStatus = watch("status");
   const watchCategory = watch("category");
-  console.log("PostAddNew ~ watchCategory", watchCategory);
+  const addPostHandler = async (values) => {
+    const cloneValues = { ...values };
+    cloneValues.slug = slugify(values.slug || values.title);
+    cloneValues.status = Number(values.status);
+    console.log(cloneValues);
+    // handleUploadImage(cloneValues.image);
+  };
+  const [progress, setProgress] = useState(0);
+  const [image, setImage] = useState("");
+  const handleUploadImage = (file) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "images/" + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progressPercent =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(progressPercent);
+        // console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            console.log("default in Switch handleUploadImage()");
+        }
+      },
+      (error) => {
+        console.log("Error", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setImage(downloadURL);
+        });
+      }
+    );
+  };
+  const onSelectImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setValue("image", file);
+    handleUploadImage(file);
+  };
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
-      <form>
+      <form onSubmit={handleSubmit(addPostHandler)}>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Title</Label>
@@ -44,32 +101,38 @@ const PostAddNew = () => {
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
+            <Label>Image</Label>
+            <ImageUpload
+              onChange={onSelectImage}
+              className="h-[250px]"
+              progress={progress}
+              image={image}
+            ></ImageUpload>
+          </Field>
+          <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "approved"}
-                onClick={() => setValue("status", "approved")}
-                value="approved"
+                checked={Number(watchStatus) === postStatus.APPROVED}
+                value={postStatus.APPROVED}
               >
                 Approved
               </Radio>
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "pending"}
-                onClick={() => setValue("status", "pending")}
-                value="pending"
+                checked={Number(watchStatus) === postStatus.PEDING}
+                value={postStatus.PEDING}
               >
                 Pending
               </Radio>
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "reject"}
-                onClick={() => setValue("status", "reject")}
-                value="reject"
+                checked={Number(watchStatus) === postStatus.REJECT}
+                value={postStatus.REJECT}
               >
                 Reject
               </Radio>
