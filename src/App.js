@@ -7,6 +7,7 @@ import PageNotFound from "pages/PageNotFound";
 import PostDetailsPage from "pages/PostDetailsPage";
 import DashboardLayout from "module/dashboard/DashboardLayout";
 import DashboardPage from "pages/DashboardPage";
+import PostManage from "module/post/PostManage";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
             <Route
               path="/dashboard"
               element={<DashboardPage></DashboardPage>}
+            ></Route>
+            <Route
+              path="/manage/post"
+              element={<PostManage></PostManage>}
             ></Route>
           </Route>
         </Routes>
