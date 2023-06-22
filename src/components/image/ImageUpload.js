@@ -1,10 +1,17 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 const ImageUpload = (props) => {
-  const { name, className = "", progress = 0, image = "", ...rest } = props;
+  const {
+    name,
+    className = "",
+    progress = 0,
+    image = "",
+    handleDeleteImage = () => {},
+    ...rest
+  } = props;
   return (
     <label
-      className={`cursor-pointer flex items-center justify-center bg-gray-100 border border-dashed w-full min-h-[200px] rounded-lg ${className} relative overflow-hidden`}
+      className={`cursor-pointer flex items-center justify-center bg-gray-100 border border-dashed w-full min-h-[200px] rounded-lg ${className} relative overflow-hidden group`}
     >
       <input
         type="file"
@@ -27,7 +34,29 @@ const ImageUpload = (props) => {
         </div>
       )}
       {image && (
-        <img src={image} className="w-full h-full object-cover" alt="" />
+        <Fragment>
+          <img src={image} className="w-full h-full object-cover" alt="" />
+          <button
+            type="button"
+            className="w-16 h-16 bg-white rounded-full flex items-center justify-center cursor-pointer absolute z-10 text-red-500 opacity-0 invisible transition-all group-hover:opacity-100 group-hover:visible"
+            onClick={handleDeleteImage}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </Fragment>
       )}
       {!image && (
         <div
