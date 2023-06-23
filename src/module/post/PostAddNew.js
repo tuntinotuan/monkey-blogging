@@ -39,36 +39,52 @@ const PostAddNew = () => {
     },
   });
   const { userInfo } = useAuth();
-  const { image, progress, handleSelectImage, handleDeleteImage } =
-    useFirebaseImage(setValue, getValues);
+  const {
+    image,
+    progress,
+    handleSelectImage,
+    handleDeleteImage,
+    handleResetImage,
+  } = useFirebaseImage(setValue, getValues);
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
+  const [loading, setLoading] = useState(false);
   const watchStatus = watch("status");
   const watchHot = watch("hot");
   // const watchCategory = watch("category");
   const addPostHandler = async (values) => {
-    const cloneValues = { ...values };
-    cloneValues.slug = slugify(values.slug || values.title, { lower: true });
-    cloneValues.status = Number(values.status);
-    console.log(cloneValues);
-    // handleUploadImage(cloneValues.image);
-    const colRef = collection(db, "posts");
-    await addDoc(colRef, {
-      ...cloneValues,
-      image,
-      userId: userInfo.uid,
-      createdAt: serverTimestamp(),
-    });
-    toast.success("Create new post successfully!!!");
-    reset({
-      title: "",
-      slug: "",
-      status: 2,
-      categoryId: "",
-      hot: false,
-      image: "",
-    });
-    setSelectCategory(null);
+    setLoading(true);
+    try {
+      const cloneValues = { ...values };
+      cloneValues.slug = slugify(values.slug || values.title, { lower: true });
+      cloneValues.status = Number(values.status);
+      console.log(cloneValues);
+      // handleUploadImage(cloneValues.image);
+      const colRef = collection(db, "posts");
+      await addDoc(colRef, {
+        ...cloneValues,
+        image,
+        userId: userInfo.uid,
+        createdAt: serverTimestamp(),
+      });
+      toast.success("Create new post successfully!!!");
+      setLoading(false);
+      reset({
+        title: "",
+        slug: "",
+        status: 2,
+        categoryId: "",
+        hot: false,
+        image: "",
+      });
+      handleResetImage();
+      setSelectCategory(null);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
   console.log("iduser", userInfo);
 
@@ -89,6 +105,10 @@ const PostAddNew = () => {
     }
     getData();
   }, []);
+
+  useEffect(() => {
+    document.title = "Monkey Blogging - Add new post";
+  });
 
   const handleClickOption = (item) => {
     setSelectCategory(item);
@@ -192,7 +212,12 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <Button type="submit" className="mx-auto">
+        <Button
+          type="submit"
+          className="mx-auto w-[250px]"
+          disabled={loading}
+          isLoading={loading}
+        >
           Add new post
         </Button>
       </form>

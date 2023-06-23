@@ -1,9 +1,8 @@
 import { Button } from "components/button";
 import { Field } from "components/field";
-import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Input, InputPasswordToggle } from "components/input";
 import { Label } from "components/label";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +10,7 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import AuthenticationPage from "./AuthenticationPage";
 import { useAuth } from "contexts/auth-context";
 
@@ -33,13 +32,10 @@ const SignUpPage = () => {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    watch,
-    reset,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
-  const [togglePassword, setTogglePassword] = useState(false);
   const handleSignUp = async (values) => {
     console.log(values);
     if (!isValid) return;
