@@ -4,68 +4,62 @@ import { Field, FieldCheckboxes } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
 import { db } from "firebase-app/firebase-config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import slugify from "slugify";
 import { categoryStatus } from "utils/constants";
 
-const CategoryAddNew = () => {
+const CategoryUpdate = () => {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting },
     watch,
     reset,
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      name: "",
-      slug: "",
-      status: 1,
-      createdAt: new Date(),
-    },
+    defaultValues: {},
   });
+  const [params] = useSearchParams();
   const navigate = useNavigate();
+  const categoryId = params.get("id");
   const watchStatus = watch("status");
-  const handleAddNewCategory = async (values) => {
-    if (!isValid) return;
-    const newValues = { ...values };
-    newValues.slug = slugify(newValues.name || newValues.slug, {
-      lower: true,
-    });
-    newValues.status = Number(newValues.status);
-    const colRef = collection(db, "categories");
+  useEffect(() => {
+    async function fetchCategoryId() {
+      const colRef = doc(db, "categories", categoryId);
+      const docSnap = await getDoc(colRef);
+      reset(docSnap.data());
+      console.log(docSnap.data());
+    }
+    fetchCategoryId();
+  }, [categoryId, reset]);
+  const handleUpdateCategory = async (values) => {
     try {
-      await addDoc(colRef, {
-        ...newValues,
-        createdAt: serverTimestamp(),
+      const colRef = doc(db, "categories", categoryId);
+      await updateDoc(colRef, {
+        name: values.name,
+        slug: slugify(values.slug || values.name, { lower: true }),
+        status: Number(values.status),
+        updatedTime: serverTimestamp(),
       });
-      toast.success("Create new category successfully!");
+      toast.success("Update category successfully!");
       navigate("/manage/category");
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
-    } finally {
-      reset({
-        name: "",
-        slug: "",
-        status: 1,
-        createdAt: new Date(),
-      });
     }
-    console.log(newValues);
   };
+  if (!categoryId) return;
   return (
     <div>
       <DashboardHeading
-        title="New category"
-        desc="Add new category"
+        title="Update category"
+        desc="Update newest category"
       ></DashboardHeading>
-      <form onSubmit={handleSubmit(handleAddNewCategory)} autoComplete="off">
+      <form onSubmit={handleSubmit(handleUpdateCategory)} autoComplete="off">
         <div className="form-layout">
           <Field>
             <Label>Name</Label>
@@ -113,11 +107,11 @@ const CategoryAddNew = () => {
           disabled={isSubmitting}
           isLoading={isSubmitting}
         >
-          Add new category
+          Update category
         </Button>
       </form>
     </div>
   );
 };
 
-export default CategoryAddNew;
+export default CategoryUpdate;

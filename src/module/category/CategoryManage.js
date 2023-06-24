@@ -6,11 +6,13 @@ import { db } from "firebase-app/firebase-config";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const colRef = collection(db, "categories");
     onSnapshot(colRef, (snapshot) => {
@@ -68,17 +70,21 @@ const CategoryManage = () => {
                   <em className="text-gray-400">{category.slug}</em>
                 </td>
                 <td>
-                  {category.status === categoryStatus.APPROVED && (
+                  {Number(category.status) === categoryStatus.APPROVED && (
                     <LabelStatus type="success">Approved</LabelStatus>
                   )}
-                  {category.status === categoryStatus.UNAPPROVED && (
+                  {Number(category.status) === categoryStatus.UNAPPROVED && (
                     <LabelStatus type="warning">Unapproved</LabelStatus>
                   )}
                 </td>
                 <td>
                   <div className="flex gap-5 text-gray-400">
                     <ActionView></ActionView>
-                    <ActionEdit></ActionEdit>
+                    <ActionEdit
+                      onClick={() =>
+                        navigate(`/manage/update-category?id=${category.id}`)
+                      }
+                    ></ActionEdit>
                     <ActionDelete
                       onClick={() => handleDeleteCategory(category.id)}
                     ></ActionDelete>
