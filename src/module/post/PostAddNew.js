@@ -184,7 +184,7 @@ const PostAddNew = () => {
             ></Toggle>
           </Field>
           <Field>
-            <Label>Status</Label>w
+            <Label>Status</Label>
             <FieldCheckboxes>
               <Radio
                 name="status"
