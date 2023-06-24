@@ -12,6 +12,7 @@ import PostAddNew from "module/post/PostAddNew";
 import CategoryAddNew from "module/category/CategoryAddNew";
 import UserAddNew from "module/user/UserAddNew";
 import UserProfile from "module/user/UserProfile";
+import CategoryManage from "module/category/CategoryManage";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
             <Route
               path="/manage/add-post"
               element={<PostAddNew></PostAddNew>}
+            ></Route>
+            <Route
+              path="/manage/category"
+              element={<CategoryManage></CategoryManage>}
             ></Route>
             <Route
               path="/manage/add-category"
