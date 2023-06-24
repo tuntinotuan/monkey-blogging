@@ -16,6 +16,10 @@ const DashboardStyles = styled.div`
       color: ${(props) => props.theme.primary};
       letter-spacing: 1px;
     }
+    &-short-desc {
+      font-size: 14px;
+      color: ${(props) => props.theme.gray80};
+    }
     &-main {
       display: grid;
       grid-template-columns: 300px minmax(0, 1fr);
