@@ -3,7 +3,15 @@ import { Button } from "components/button";
 import { LabelStatus } from "components/label";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +20,18 @@ import { categoryStatus } from "utils/constants";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const colRef = collection(db, "categories");
-    onSnapshot(colRef, (snapshot) => {
+    const newRef = categoryFilter
+      ? query(
+          colRef,
+          where("name", ">=", categoryFilter),
+          where("name", "<=", categoryFilter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
         results.push({
@@ -25,7 +41,7 @@ const CategoryManage = () => {
       });
       setCategoryList(results);
     });
-  }, []);
+  }, [categoryFilter]);
   const handleDeleteCategory = async (categoryId) => {
     const colRef = doc(db, "categories", categoryId);
     Swal.fire({
@@ -43,6 +59,9 @@ const CategoryManage = () => {
       }
     });
   };
+  const handleSearchCategory = debounce((e) => {
+    setCategoryFilter(e.target.value);
+  }, 500);
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -50,6 +69,14 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
+      <div className="flex justify-end my-5">
+        <input
+          type="text"
+          placeholder="Search category..."
+          className="ml-auto border border-gray-300 rounded-full py-3 px-4"
+          onChange={handleSearchCategory}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
