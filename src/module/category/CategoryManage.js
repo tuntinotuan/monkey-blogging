@@ -7,8 +7,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
+  limit,
   onSnapshot,
   query,
+  startAfter,
   where,
 } from "firebase/firestore";
 import { debounce } from "lodash";
@@ -18,20 +21,22 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
+const CATEGORY_PER_PAGE = 1;
+
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [currentDocument, setCurrentdocument] = useState("");
+  const [total, setTotal] = useState("");
   const navigate = useNavigate();
-  useEffect(() => {
-    const colRef = collection(db, "categories");
-    const newRef = categoryFilter
-      ? query(
-          colRef,
-          where("name", ">=", categoryFilter),
-          where("name", "<=", categoryFilter + "utf8")
-        )
-      : colRef;
-    onSnapshot(newRef, (snapshot) => {
+
+  const handleLoadMoreCategory = async () => {
+    const next = query(
+      collection(db, "categories"),
+      startAfter(currentDocument),
+      limit(CATEGORY_PER_PAGE)
+    );
+    onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
         results.push({
@@ -39,23 +44,62 @@ const CategoryManage = () => {
           ...doc.data(),
         });
       });
-      setCategoryList(results);
+      setCategoryList([...categoryList, ...results]);
     });
+    const documentSnapshots = await getDocs(next);
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setCurrentdocument(lastVisible);
+    // console.log(documentSnapshots.docs[0].id);
+  };
+  useEffect(() => {
+    async function fetchData() {
+      const colRef = collection(db, "categories");
+      const newRef = categoryFilter
+        ? query(
+            colRef,
+            where("name", ">=", categoryFilter),
+            where("name", "<=", categoryFilter + "utf8")
+          )
+        : query(colRef, limit(CATEGORY_PER_PAGE));
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
+      onSnapshot(newRef, (snapshot) => {
+        let results = [];
+        snapshot.forEach((doc) => {
+          results.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setCategoryList(results);
+      });
+      setCurrentdocument(lastVisible);
+    }
+    fetchData();
   }, [categoryFilter]);
-  const handleDeleteCategory = async (categoryId) => {
+  const handleDeleteCategory = async (categoryId, categoryName) => {
     const colRef = doc(db, "categories", categoryId);
     Swal.fire({
-      title: "Are you sure?",
+      title: `Are you sure? ${categoryName}`,
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         await deleteDoc(colRef);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire(
+          "Deleted!",
+          `Your ${categoryName} has been deleted.`,
+          "success"
+        );
       }
     });
   };
@@ -105,7 +149,7 @@ const CategoryManage = () => {
                   )}
                 </td>
                 <td>
-                  <div className="flex gap-5 text-gray-400">
+                  <div className="flex gap-3 text-gray-400">
                     <ActionView></ActionView>
                     <ActionEdit
                       onClick={() =>
@@ -113,7 +157,9 @@ const CategoryManage = () => {
                       }
                     ></ActionEdit>
                     <ActionDelete
-                      onClick={() => handleDeleteCategory(category.id)}
+                      onClick={() =>
+                        handleDeleteCategory(category.id, category.name)
+                      }
                     ></ActionDelete>
                   </div>
                 </td>
@@ -121,6 +167,16 @@ const CategoryManage = () => {
             ))}
         </tbody>
       </Table>
+      {categoryList.length < total && (
+        <Button
+          kind="ghost"
+          className="mx-auto"
+          height="56px"
+          onClick={handleLoadMoreCategory}
+        >
+          Load more
+        </Button>
+      )}
     </div>
   );
 };
