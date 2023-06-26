@@ -34,9 +34,9 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      categoryId: "",
       hot: false,
       image: "",
+      category: {},
     },
   });
   const { userInfo } = useAuth();
@@ -65,7 +65,6 @@ const PostAddNew = () => {
       await addDoc(colRef, {
         ...cloneValues,
         image,
-        userId: userInfo.uid,
         createdAt: serverTimestamp(),
       });
       toast.success("Create new post successfully!!!");
@@ -74,9 +73,9 @@ const PostAddNew = () => {
         title: "",
         slug: "",
         status: 2,
-        categoryId: "",
         hot: false,
         image: "",
+        category: {},
       });
       handleResetImage();
       setSelectCategory(null);
@@ -87,8 +86,22 @@ const PostAddNew = () => {
       setLoading(false);
     }
   };
-  console.log("iduser", userInfo);
-
+  useEffect(() => {
+    async function getData() {
+      if (!userInfo.uid) return;
+      const colRef = collection(db, "users");
+      const q = query(colRef, where("email", "==", userInfo.email));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setValue("user", {
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+    }
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     async function getData() {
       const colRef = collection(db, "categories");
@@ -102,7 +115,6 @@ const PostAddNew = () => {
         });
       });
       setCategories(result);
-      console.log(result);
     }
     getData();
   }, []);
@@ -113,7 +125,7 @@ const PostAddNew = () => {
 
   const handleClickOption = (item) => {
     setSelectCategory(item);
-    setValue("categoryId", item.id);
+    setValue("category", item);
   };
   return (
     <PostAddNewStyles>
