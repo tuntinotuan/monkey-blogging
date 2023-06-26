@@ -4,7 +4,8 @@ import { Field, FieldCheckboxes } from "components/field";
 import ImageUpload from "components/image/ImageUpload";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import { db } from "firebase-app/firebase-config";
+import { auth, db } from "firebase-app/firebase-config";
+import { updateProfile } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
@@ -30,16 +31,27 @@ const UserUpdate = () => {
   } = useForm({
     mode: "onChange",
   });
+  const watchStatus = watch("status");
+  const watchRole = watch("role");
+  const imageUrl = getValues("avatar");
+  const imageRegex = /%2F(\S+)\?/gm.exec(imageUrl);
+  const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
+  console.log(imageName);
   const {
     image,
+    setImage,
     progress,
     handleSelectImage,
     handleResetImage,
     handleDeleteImage,
-  } = useFirebaseImage(setValue, getValues);
-  const watchStatus = watch("status");
-  const watchRole = watch("role");
-  const imageUrl = getValues("avatar");
+  } = useFirebaseImage(setValue, getValues, imageName, deleteAvatar);
+  async function deleteAvatar() {
+    const colRef = doc(db, "users", userId);
+    await updateDoc(colRef, {
+      avatar: "",
+    });
+    handleResetImage();
+  }
   useEffect(() => {
     async function fetchUser() {
       const colRef = doc(db, "users", userId);
@@ -48,17 +60,21 @@ const UserUpdate = () => {
     }
     fetchUser();
   }, [userId, reset]);
+  useEffect(() => {
+    setImage(imageUrl);
+  }, [imageUrl, setImage]);
   const handleUpdateUser = async (values) => {
     if (!isValid) return;
     try {
       const colRef = doc(db, "users", userId);
       await updateDoc(colRef, {
         ...values,
+        avatar: image,
         status: Number(values.status),
         role: Number(values.role),
         updatedTime: serverTimestamp(),
       });
-      toast.success("Update category successfully!");
+      toast.success("Update user successfully!");
       navigate("/manage/user");
     } catch (error) {
       console.log(error);
@@ -79,7 +95,7 @@ const UserUpdate = () => {
             onChange={handleSelectImage}
             handleDeleteImage={handleDeleteImage}
             progress={progress}
-            image={imageUrl}
+            image={image}
           ></ImageUpload>
         </div>
         <div className="form-layout">
@@ -186,7 +202,7 @@ const UserUpdate = () => {
           disabled={isSubmitting}
           isLoading={isSubmitting}
         >
-          Add new user
+          Update user
         </Button>
       </form>
     </div>
