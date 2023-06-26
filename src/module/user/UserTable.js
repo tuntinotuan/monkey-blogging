@@ -6,8 +6,11 @@ import { useEffect } from "react";
 import { Table } from "components/table";
 import { LabelStatus } from "components/label";
 import { db } from "firebase-app/firebase-config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { ActionDelete, ActionEdit } from "components/action";
+import Swal from "sweetalert2";
+import { deleteUser } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const UserTable = () => {
   const navigate = useNavigate();
@@ -28,6 +31,29 @@ const UserTable = () => {
     }
     fetchDataUser();
   }, []);
+  const handleDeleteUser = async (user) => {
+    const colRef = doc(db, "users", user.id);
+    Swal.fire({
+      title: `Are you sure? ${user.username}`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef);
+        await deleteUser(user);
+        toast.success("Delete user successfully!");
+        Swal.fire(
+          "Deleted!",
+          `Your ${user.username} has been deleted.`,
+          "success"
+        );
+      }
+    });
+  };
   const renderLabelRole = (role) => {
     switch (role) {
       case userRole.ADMIN:
@@ -79,13 +105,9 @@ const UserTable = () => {
       <th>
         <div className="flex gap-3 text-gray-400">
           <ActionEdit
-            onClick={() => navigate(`/manage/update-category?id=${user.id}`)}
+            onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
           ></ActionEdit>
-          <ActionDelete
-          // onClick={() =>
-          //   handleDeleteCategory(category.id, category.name)
-          // }
-          ></ActionDelete>
+          <ActionDelete onClick={() => handleDeleteUser(user)}></ActionDelete>
         </div>
       </th>
     </tr>

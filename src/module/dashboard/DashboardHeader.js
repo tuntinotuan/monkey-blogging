@@ -24,7 +24,6 @@ const DashboardHeaderStyles = styled.div`
 
 const DashboardHeader = () => {
   const { userInfo } = useAuth();
-  console.log(userInfo);
   return (
     <DashboardHeaderStyles>
       <Button to="/manage/add-post" className="header-button" height="52px">
