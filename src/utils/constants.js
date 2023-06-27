@@ -12,7 +12,7 @@ export const theme = {
 
 export const postStatus = {
   APPROVED: 1,
-  PEDING: 2,
+  PENDING: 2,
   REJECT: 3,
 };
 export const categoryStatus = {

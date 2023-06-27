@@ -209,8 +209,8 @@ const PostAddNew = () => {
               <Radio
                 name="status"
                 control={control}
-                checked={Number(watchStatus) === postStatus.PEDING}
-                value={postStatus.PEDING}
+                checked={Number(watchStatus) === postStatus.PENDING}
+                value={postStatus.PENDING}
               >
                 Pending
               </Radio>
