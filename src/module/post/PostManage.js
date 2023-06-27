@@ -1,7 +1,6 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import { LabelStatus } from "components/label";
-import { Pagination } from "components/pagination";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
 import {
@@ -12,6 +11,7 @@ import {
   limit,
   onSnapshot,
   query,
+  startAfter,
   where,
 } from "firebase/firestore";
 import { debounce } from "lodash";
@@ -21,13 +21,35 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postStatus } from "utils/constants";
 
-const POST_PER_PAGE = 4;
+const POST_PER_PAGE = 1;
 
 const PostManage = () => {
   const navigate = useNavigate();
   const [postList, setPostList] = useState([]);
   const [filter, setFilter] = useState("");
   const [currentDocument, setCurrentdocument] = useState("");
+  const [total, setTotal] = useState(0);
+  const handleLoadMorePost = async () => {
+    const next = query(
+      collection(db, "posts"),
+      startAfter(currentDocument),
+      limit(POST_PER_PAGE)
+    );
+    onSnapshot(next, (snapshot) => {
+      let results = [];
+      snapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setPostList([...postList, ...results]);
+    });
+    const documentSnapshots = await getDocs(next);
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setCurrentdocument(lastVisible);
+  };
   useEffect(() => {
     async function fetchData() {
       const colRef = collection(db, "posts");
@@ -41,6 +63,9 @@ const PostManage = () => {
       const documentSnapshots = await getDocs(newRef);
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -162,10 +187,14 @@ const PostManage = () => {
         </tbody>
       </Table>
       <div className="mt-10">
-        {/* <Pagination></Pagination> */}
-        <Button className="mx-auto w-[200px]" onClick={() => {}}>
-          Load more
-        </Button>
+        {total > postList.length && (
+          <Button
+            className="mx-auto w-[200px]"
+            onClick={() => handleLoadMorePost()}
+          >
+            Load more
+          </Button>
+        )}
       </div>
     </div>
   );
