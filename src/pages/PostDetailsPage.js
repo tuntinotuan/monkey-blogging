@@ -1,11 +1,18 @@
 import Heading from "components/layout/Heading";
 import Layout from "components/layout/Layout";
+import { db } from "firebase-app/firebase-config";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import PostCategory from "module/post/PostCategory";
 import PostImage from "module/post/PostImage";
 import PostItem from "module/post/PostItem";
 import PostMeta from "module/post/PostMeta";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import PageNotFound from "./PageNotFound";
+import parse from "html-react-parser";
 
 const PostDetailsPageStyles = styled.div`
   padding-bottom: 100px;
@@ -70,25 +77,46 @@ const PostDetailsPageStyles = styled.div`
 `;
 
 const PostDetailsPage = () => {
+  const { slug } = useParams();
+  const [postData, setPostData] = useState({});
+  useEffect(() => {
+    async function fetchPostData() {
+      const colRef = query(collection(db, "posts"), where("slug", "==", slug));
+      onSnapshot(colRef, (snapshot) => {
+        snapshot.forEach((doc) => {
+          doc.data() && setPostData(doc.data());
+        });
+      });
+    }
+    fetchPostData();
+  }, [slug]);
+  const { user } = postData;
+  if (!slug || !postData.title) return <PageNotFound></PageNotFound>;
   return (
     <PostDetailsPageStyles>
       <Layout>
         <div className="container">
           <div className="post-header">
             <PostImage
-              url="https://images.unsplash.com/photo-1649837867356-6c7ef7057f32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+              url={postData?.image}
               className="post-feature"
             ></PostImage>
             <div className="post-info">
-              <PostCategory className="mb-6">Kiến thức</PostCategory>
-              <h1 className="post-heading">
-                Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-              </h1>
-              <PostMeta></PostMeta>
+              <PostCategory className="mb-6">
+                {postData?.category?.name}
+              </PostCategory>
+              <h1 className="post-heading">{postData?.title}</h1>
+              <PostMeta
+                date={new Date(
+                  user?.createdAt?.seconds * 1000
+                ).toLocaleDateString("vi-VI")}
+                authName={user?.fullname}
+              ></PostMeta>
             </div>
           </div>
           <div className="post-content">
-            <div className="entry-content">
+            <div className="entry-content">{parse(postData?.content)}</div>
+            {/* <div className="entry-content">
               <h2>Chương 1</h2>
               <p>
                 Gastronomy atmosphere set aside. Slice butternut cooking home.
@@ -159,21 +187,16 @@ const PostDetailsPage = () => {
                 atmosphere. Sweet soften dinners, cover mustard infused skillet,
                 Skewers on culinary experience.
               </p>
-            </div>
+            </div> */}
             <div className="author">
               <div className="author-image">
-                <img
-                  src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
-                  alt=""
-                />
+                <img src={user?.avatar} alt="" />
               </div>
               <div className="author-content">
-                <h3 className="author-name">Evondev</h3>
+                <h3 className="author-name">{user?.fullname}</h3>
                 <p className="author-desc">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Dignissimos non animi porro voluptates quibusdam optio nulla
-                  quis nihil ipsa error delectus temporibus nesciunt, nam
-                  officiis adipisci suscipit voluptate eum totam!
+                  {user?.description ||
+                    "Lorem, ipsum dolor sit amet consectetur adipisicing elit.Dignissimos non animi porro voluptates quibusdam optio nullaquis nihil ipsa error delectus temporibus nesciunt, nam officiis adipisci suscipit voluptate eum totam!"}
                 </p>
               </div>
             </div>
