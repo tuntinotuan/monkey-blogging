@@ -176,7 +176,11 @@ const PostManage = () => {
                     <ActionView
                       onClick={() => navigate(`/${post.slug}`)}
                     ></ActionView>
-                    <ActionEdit></ActionEdit>
+                    <ActionEdit
+                      onClick={() =>
+                        navigate(`/manage/update-post?id=${post.id}`)
+                      }
+                    ></ActionEdit>
                     <ActionDelete
                       onClick={() => handleDeletePost(post.id, post.title)}
                     ></ActionDelete>
