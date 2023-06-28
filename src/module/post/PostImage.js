@@ -8,18 +8,14 @@ const PostImageStyles = styled.div`
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
+    border: 1px solid ${(props) => props.theme.grayLight};
   }
 `;
 
-const PostImage = ({
-  url = "",
-  alt = "unsplash",
-  className = "",
-  to = null,
-}) => {
+const PostImage = ({ url = "", alt = "unsplash", className = "", to = "" }) => {
   if (to)
     return (
-      <Link to={to}>
+      <Link to={`/${to}`}>
         <PostImageStyles className={`post-image ${className}`}>
           <img src={url} alt={alt} />
         </PostImageStyles>
