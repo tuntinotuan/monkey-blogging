@@ -1,10 +1,8 @@
-import Heading from "components/layout/Heading";
 import Layout from "components/layout/Layout";
 import { db } from "firebase-app/firebase-config";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import PostCategory from "module/post/PostCategory";
 import PostImage from "module/post/PostImage";
-import PostItem from "module/post/PostItem";
 import PostMeta from "module/post/PostMeta";
 import React from "react";
 import { useState } from "react";
@@ -14,6 +12,7 @@ import styled from "styled-components";
 import PageNotFound from "./PageNotFound";
 import parse from "html-react-parser";
 import { AuthorBox } from "components/author";
+import PostRelated from "module/post/PostRelated";
 
 const PostDetailsPageStyles = styled.div`
   padding-bottom: 100px;
@@ -53,7 +52,7 @@ const PostDetailsPageStyles = styled.div`
       width: 200px;
       height: 200px;
       flex-shrink: 0;
-      border-radius: inherit;
+      border-radius: 20px 0px 0px 20px;
     }
     &-image img {
       width: 100%;
@@ -91,6 +90,10 @@ const PostDetailsPage = () => {
     }
     fetchPostData();
   }, [slug]);
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [slug]);
+
   const { user } = postData;
   if (!slug || !postData.title) return <PageNotFound></PageNotFound>;
   return (
@@ -116,7 +119,11 @@ const PostDetailsPage = () => {
             </div>
           </div>
           <div className="post-content">
-            <div className="entry-content">{parse(postData?.content)}</div>
+            <div className="entry-content">
+              {parse(
+                postData?.content || "<h2>Content is being Development</h2>"
+              )}
+            </div>
             {/* <div className="entry-content">
               <h2>Chương 1</h2>
               <p>
@@ -189,16 +196,13 @@ const PostDetailsPage = () => {
                 Skewers on culinary experience.
               </p>
             </div> */}
-            <AuthorBox userId={user.id}></AuthorBox>
+            <AuthorBox userId={user?.id}></AuthorBox>
           </div>
           <div className="post-related">
-            <Heading>Bài viết liên quan</Heading>
-            <div className="grid-layout grid-layout--primary">
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-            </div>
+            <PostRelated
+              categoryId={postData?.category?.id}
+              postCurrentTitle={postData?.title}
+            ></PostRelated>
           </div>
         </div>
       </Layout>
