@@ -17,6 +17,7 @@ import CategoryUpdate from "module/category/CategoryUpdate";
 import UserManage from "module/user/UserManage";
 import UserUpdate from "module/user/UserUpdate";
 import PostUpdate from "module/post/PostUpdate";
+import CagetoryPage from "pages/CagetoryPage";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage></HomePage>}></Route>
+          <Route
+            path="/category/:slug"
+            element={<CagetoryPage></CagetoryPage>}
+          ></Route>
           <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
           <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>
           <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
