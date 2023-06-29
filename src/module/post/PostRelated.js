@@ -11,9 +11,11 @@ const PostRelated = ({ categoryId, postCurrentTitle }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     async function fetchCategoryRelated() {
+      const colRef = collection(db, "posts");
       const q = query(
-        collection(db, "posts"),
-        where("category.id", "==", categoryId)
+        colRef,
+        where("category.id", "==", categoryId),
+        where("title", "!=", postCurrentTitle)
       );
       onSnapshot(q, (snapshot) => {
         let results = [];

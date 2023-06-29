@@ -1,6 +1,12 @@
 import Heading from "components/layout/Heading";
 import { db } from "firebase-app/firebase-config";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  limit,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import PostFeatureItem from "module/post/PostFeatureItem";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -13,7 +19,8 @@ const HomeFeature = () => {
     const queries = query(
       colRef,
       where("status", "==", 1),
-      where("hot", "==", true)
+      where("hot", "==", true),
+      limit(6)
     );
     onSnapshot(queries, (snapshot) => {
       const results = [];

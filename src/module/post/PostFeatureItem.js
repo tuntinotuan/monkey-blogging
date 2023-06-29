@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "firebase-app/firebase-config";
 import slugify from "slugify";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
