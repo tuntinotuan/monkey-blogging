@@ -1,6 +1,7 @@
 import React from "react";
 import { useController } from "react-hook-form";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const InputStyles = styled.div`
   position: relative;
@@ -33,6 +34,14 @@ const InputStyles = styled.div`
   }
 `;
 
+/**
+ *
+ * @param {*} placeholder(optional) - Placeholder of input
+ * @param {*} name(optional) - name of input
+ * @param {*} control - control from react hook form
+ * @returns Input
+ */
+
 const Input = ({
   name = "",
   type = "text",
@@ -48,6 +57,14 @@ const Input = ({
       {children && <div className="input-icon">{children}</div>}
     </InputStyles>
   );
+};
+
+Input.propTypes = {
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  children: PropTypes.any,
+  hasIcon: PropTypes.bool,
+  control: PropTypes.any.isRequired,
 };
 
 export default Input;
