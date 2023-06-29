@@ -2,6 +2,7 @@ import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import { LabelStatus } from "components/label";
 import { Table } from "components/table";
+import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
@@ -25,6 +26,7 @@ const POST_PER_PAGE = 1;
 
 const PostManage = () => {
   const navigate = useNavigate();
+  const { userInfo } = useAuth();
   const [postList, setPostList] = useState([]);
   const [filter, setFilter] = useState("");
   const [currentDocument, setCurrentdocument] = useState("");
@@ -112,6 +114,7 @@ const PostManage = () => {
         break;
     }
   };
+  if (userInfo.role === 3) return null;
   return (
     <div>
       <DashboardHeading
