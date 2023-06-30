@@ -111,6 +111,9 @@ const Header = () => {
               <strong className="text-primary">
                 {getLastName(userInfo?.displayName)}
               </strong>
+              <Button height="56px" to="/dashboard">
+                Dashboard
+              </Button>
               <Button onClick={handleSignOut} kind="secondary" height="56px">
                 Sign out
               </Button>

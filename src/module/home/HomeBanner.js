@@ -1,4 +1,5 @@
 import { Button } from "components/button";
+import { useAuth } from "contexts/auth-context";
 import React from "react";
 import styled from "styled-components";
 
@@ -32,6 +33,7 @@ const HomeBannerStyles = styled.div`
 `;
 
 const HomeBanner = () => {
+  const { userInfo } = useAuth();
   return (
     <HomeBannerStyles>
       <div className="container">
@@ -43,9 +45,11 @@ const HomeBanner = () => {
               libero, modi sit voluptatem harum ullam ipsum sint, dicta non, ut
               quisquam et quod delectus rem nemo fugit voluptates impedit est.
             </p>
-            <Button to="/sign-in" kind="secondary">
-              Get Started
-            </Button>
+            {!userInfo && (
+              <Button to="/sign-in" kind="secondary">
+                Get Started
+              </Button>
+            )}
           </div>
           <div className="banner-image">
             <img srcSet="/img-banner.png 2x" alt="banner" />

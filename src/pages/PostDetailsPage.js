@@ -106,15 +106,16 @@ const PostDetailsPage = () => {
               className="post-feature"
             ></PostImage>
             <div className="post-info">
-              <PostCategory className="mb-6">
+              <PostCategory className="mb-6" to={postData?.category?.slug}>
                 {postData?.category?.name}
               </PostCategory>
               <h1 className="post-heading">{postData?.title}</h1>
               <PostMeta
                 date={new Date(
-                  user?.createdAt?.seconds * 1000
+                  postData?.createdAt?.seconds * 1000
                 ).toLocaleDateString("vi-VI")}
                 authName={user?.fullname}
+                to={user?.username}
               ></PostMeta>
             </div>
           </div>

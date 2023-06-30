@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import AuthenticationPage from "./AuthenticationPage";
 import { Field } from "components/field";
 import { useForm } from "react-hook-form";
@@ -6,7 +6,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "components/label";
 import { Input, InputPasswordToggle } from "components/input";
-import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Button } from "components/button";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -30,19 +29,13 @@ const SignInPage = () => {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    watch,
-    reset,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    const credentials = await signInWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password
-    );
+    await signInWithEmailAndPassword(auth, values.email, values.password);
     navigate("/");
   };
   useEffect(() => {
@@ -82,10 +75,7 @@ const SignInPage = () => {
         </div>
         <Button
           type="submit"
-          style={{
-            maxWidth: 250,
-            margin: "0 auto",
-          }}
+          className="w-[200px] mx-auto"
           disabled={isSubmitting}
           isLoading={isSubmitting}
         >

@@ -41,11 +41,7 @@ const SignUpPage = () => {
   const handleSignUp = async (values) => {
     console.log(values);
     if (!isValid) return;
-    const user = await createUserWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password
-    );
+    await createUserWithEmailAndPassword(auth, values.email, values.password);
     await updateProfile(auth.currentUser, {
       displayName: values.fullname,
       photoURL:
@@ -116,7 +112,7 @@ const SignUpPage = () => {
         </div>
         <Button
           type="submit"
-          style={{ maxWidth: 250, margin: "0 auto" }}
+          className="w-[200px] mx-auto"
           disabled={isSubmitting}
           isLoading={isSubmitting}
         >
