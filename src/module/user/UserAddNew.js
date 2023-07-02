@@ -6,7 +6,7 @@ import { Input } from "components/input";
 import { Label } from "components/label";
 import { auth, db } from "firebase-app/firebase-config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
@@ -58,7 +58,7 @@ const UserAddNew = () => {
           image ||
           "https://images.unsplash.com/photo-1606041008023-472dfb5e530f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=388&q=80",
       });
-      await addDoc(collection(db, "users"), {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
         fullname: values.fullname,
         email: values.email,
         password: values.password,
