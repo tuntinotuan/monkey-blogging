@@ -35,8 +35,13 @@ const SignInPage = () => {
   });
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    await signInWithEmailAndPassword(auth, values.email, values.password);
-    navigate("/");
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error("Incorrect account or password!");
+    }
   };
   useEffect(() => {
     const arrErrors = Object.values(errors);
