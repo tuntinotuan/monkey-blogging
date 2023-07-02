@@ -1,7 +1,7 @@
 import { auth } from "firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 const SidebarStyles = styled.div`
   width: 300px;
@@ -141,10 +141,10 @@ const sidebarLinks = [
 const Sidebar = () => {
   return (
     <SidebarStyles className="sidebar">
-      <div className="sidebar-logo">
+      <Link className="sidebar-logo" to="/">
         <img srcSet="/logo.png 2x" alt="" />
         <span>Monkey Blogging</span>
-      </div>
+      </Link>
       {sidebarLinks.map((link) => (
         <NavLink
           to={link.url}

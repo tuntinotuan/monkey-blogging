@@ -7,6 +7,7 @@ const SignInPage = React.lazy(() => import("pages/SignInPage"));
 const SignUpPage = React.lazy(() => import("pages/SignUpPage"));
 const PageNotFound = React.lazy(() => import("pages/PageNotFound"));
 const CagetoryPage = React.lazy(() => import("pages/CagetoryPage"));
+const AuthorPage = React.lazy(() => import("pages/AuthorPage"));
 const PostDetailsPage = React.lazy(() => import("pages/PostDetailsPage"));
 const PostUpdate = React.lazy(() => import("module/post/PostUpdate"));
 const UserUpdate = React.lazy(() => import("module/user/UserUpdate"));
@@ -48,6 +49,10 @@ function App() {
             <Route
               path="/category/:slug"
               element={<CagetoryPage></CagetoryPage>}
+            ></Route>
+            <Route
+              path="/author/:slug"
+              element={<AuthorPage></AuthorPage>}
             ></Route>
             <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
             <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>

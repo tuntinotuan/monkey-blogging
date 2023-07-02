@@ -4,7 +4,6 @@ import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
-import slugify from "slugify";
 const PostNewestItemStyles = styled.div`
   display: flex;
   align-items: center;
@@ -48,7 +47,7 @@ const PostNewestItem = ({ data }) => {
         <PostTitle to={data.slug}>{data.title}</PostTitle>
         <PostMeta
           authName={data.user?.fullname}
-          to={slugify(data.user?.fullname || "", { lower: true })}
+          to={data.user?.username}
           date={formatDate}
         ></PostMeta>
       </div>
