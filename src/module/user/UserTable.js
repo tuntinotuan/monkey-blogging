@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { userRole, userStatus } from "utils/constants";
+import { imageSunflower, userRole, userStatus } from "utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Table } from "components/table";
@@ -84,7 +84,7 @@ const UserTable = () => {
       <th className="whitespace-nowrap">
         <div className="flex items-center gap-x-3">
           <img
-            src={user.avatar}
+            src={user.avatar || imageSunflower}
             alt=""
             className="flex-shrink-0 object-cover w-10 h-10 rounded-md"
           />
@@ -99,7 +99,7 @@ const UserTable = () => {
         </div>
       </th>
       <th>{user.username}</th>
-      <th title={user.email}>{user.email.slice(0, 5) + "..."}</th>
+      <th title={user?.email}>{user?.email?.slice(0, 5) + "..."}</th>
       <th>{renderLabelStatus(user.status)}</th>
       <th>{renderLabelRole(user.role)}</th>
       <th>

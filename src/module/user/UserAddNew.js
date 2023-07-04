@@ -54,9 +54,6 @@ const UserAddNew = () => {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       await updateProfile(auth.currentUser, {
         displayName: values.fullname,
-        photoURL:
-          image ||
-          "https://images.unsplash.com/photo-1606041008023-472dfb5e530f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=388&q=80",
       });
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         fullname: values.fullname,
@@ -66,9 +63,7 @@ const UserAddNew = () => {
           lower: true,
           replacement: " ",
         }),
-        avatar:
-          image ||
-          "https://images.unsplash.com/photo-1606041008023-472dfb5e530f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=388&q=80",
+        avatar: image,
         status: Number(values.status),
         role: Number(values.role),
         createdAt: serverTimestamp(),

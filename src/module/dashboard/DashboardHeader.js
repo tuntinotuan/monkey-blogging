@@ -3,6 +3,7 @@ import { useAuth } from "contexts/auth-context";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { imageSunflower } from "utils/constants";
 const DashboardHeaderStyles = styled.div`
   background-color: white;
   padding: 20px;
@@ -30,13 +31,7 @@ const DashboardHeader = () => {
         Write new post
       </Button>
       <NavLink to="/profile" className="header-avatar">
-        <img
-          src={
-            userInfo?.avatar ||
-            "https://images.unsplash.com/photo-1606041008023-472dfb5e530f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=388&q=80"
-          }
-          alt=""
-        />
+        <img src={userInfo?.avatar || imageSunflower} alt="" />
       </NavLink>
     </DashboardHeaderStyles>
   );

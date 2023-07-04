@@ -85,8 +85,8 @@ const UserUpdate = () => {
   return (
     <div>
       <DashboardHeading
-        title="New user"
-        desc="Add new user to system"
+        title="Update user"
+        desc="Update user to system"
       ></DashboardHeading>
       <form onSubmit={handleSubmit(handleUpdateUser)}>
         <div className="w-[200px] h-[200px] mx-auto mb-10">

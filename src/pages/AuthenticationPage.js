@@ -23,6 +23,7 @@ const AuthenticationPageStyles = styled.div`
     margin-bottom: 20px;
     a {
       display: inline-block;
+      font-weight: 700;
       color: ${(props) => props.theme.primary};
     }
   }
