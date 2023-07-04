@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
 import { LoadingSpinner } from "components/loading";
+import SearchPage from "pages/SearchPage";
 const HomePage = React.lazy(() => import("pages/HomePage"));
 const SignInPage = React.lazy(() => import("pages/SignInPage"));
 const SignUpPage = React.lazy(() => import("pages/SignUpPage"));
@@ -56,6 +57,7 @@ function App() {
             ></Route>
             <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
             <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>
+            <Route path="/search" element={<SearchPage></SearchPage>}></Route>
             <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
             <Route
               path="/:slug"

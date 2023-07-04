@@ -3,8 +3,9 @@ import { IconSearch } from "components/icon";
 import { useAuth } from "contexts/auth-context";
 import { auth } from "firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { debounce } from "lodash";
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 const menuLinks = [
@@ -71,10 +72,19 @@ function getLastName(name) {
 
 const Header = () => {
   const { userInfo } = useAuth();
+  const [params] = useSearchParams();
+  const keywordSearch = params.get("keyword");
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState("");
   const handleSignOut = () => {
     signOut(auth);
     console.log("Sign out successfully!!!");
   };
+  const SearchKeywordHandler = debounce((e) => {
+    if (e.type !== "click" && e.key !== "Enter") return;
+    console.log("event", e);
+    navigate(`/search?keyword=${filter}`);
+  }, 500);
   return (
     <HeaderStyles>
       <div className="container">
@@ -96,8 +106,14 @@ const Header = () => {
               type="text"
               className="search-input"
               placeholder="Search posts..."
+              defaultValue={keywordSearch}
+              onChange={(e) => setFilter(e.target.value)}
+              onKeyDown={SearchKeywordHandler}
             />
-            <span className="search-icon">
+            <span
+              className="search-icon cursor-pointer"
+              onClick={SearchKeywordHandler}
+            >
               <IconSearch></IconSearch>
             </span>
           </div>
