@@ -6,19 +6,70 @@ import { useEffect } from "react";
 import { Table } from "components/table";
 import { LabelStatus } from "components/label";
 import { db } from "firebase-app/firebase-config";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  limit,
+  onSnapshot,
+  query,
+  startAfter,
+  where,
+} from "firebase/firestore";
 import { ActionDelete, ActionEdit } from "components/action";
 import Swal from "sweetalert2";
 import { deleteUser } from "firebase/auth";
 import { toast } from "react-toastify";
+import { Button } from "components/button";
+import { debounce } from "lodash";
+
+const USER_PER_PAGE = 5;
 
 const UserTable = () => {
   const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
+  const [currentDocument, setCurrentdocument] = useState("");
+  const [filter, setFilter] = useState("");
+  const [total, setTotal] = useState(0);
+  const handleLoadMoreUser = async () => {
+    const next = query(
+      collection(db, "users"),
+      startAfter(currentDocument),
+      limit(USER_PER_PAGE)
+    );
+    onSnapshot(next, (snapshot) => {
+      let results = [];
+      snapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setUserList([...userList, ...results]);
+    });
+    const documentSnapshots = await getDocs(next);
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setCurrentdocument(lastVisible);
+  };
   useEffect(() => {
     async function fetchDataUser() {
       const colRef = collection(db, "users");
+      const newRef = filter
+        ? query(
+            colRef,
+            where("fullname", ">=", filter),
+            where("fullname", "<=", filter + "utf8")
+          )
+        : query(colRef, limit(USER_PER_PAGE));
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
       onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
+      onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
           results.push({
@@ -28,9 +79,10 @@ const UserTable = () => {
         });
         setUserList(results);
       });
+      setCurrentdocument(lastVisible);
     }
     fetchDataUser();
-  }, []);
+  }, [filter]);
   const handleDeleteUser = async (user) => {
     const colRef = doc(db, "users", user.id);
     Swal.fire({
@@ -54,6 +106,9 @@ const UserTable = () => {
       }
     });
   };
+  const handleSearchUser = debounce((e) => {
+    setFilter(e.target.value);
+  }, 500);
   const renderLabelRole = (role) => {
     switch (role) {
       case userRole.ADMIN:
@@ -114,6 +169,16 @@ const UserTable = () => {
   );
   return (
     <div>
+      <div className="mb-10 flex justify-end">
+        <div className="w-full max-w-[300px]">
+          <input
+            type="text"
+            className="w-full p-4 rounded-lg border border-solid border-gray-300"
+            placeholder="Search User..."
+            onChange={handleSearchUser}
+          />
+        </div>
+      </div>
       <Table>
         <thead>
           <tr>
@@ -130,6 +195,11 @@ const UserTable = () => {
           {userList.length > 0 && userList.map((user) => renderUserItem(user))}
         </tbody>
       </Table>
+      {userList.length < total && (
+        <Button kind="ghost" className="mx-auto" onClick={handleLoadMoreUser}>
+          Load more
+        </Button>
+      )}
     </div>
   );
 };

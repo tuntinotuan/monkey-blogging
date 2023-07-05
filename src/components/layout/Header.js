@@ -1,8 +1,6 @@
 import { Button } from "components/button";
 import { IconSearch } from "components/icon";
 import { useAuth } from "contexts/auth-context";
-import { auth } from "firebase-app/firebase-config";
-import { signOut } from "firebase/auth";
 import { debounce } from "lodash";
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
@@ -76,10 +74,6 @@ const Header = () => {
   const keywordSearch = params.get("keyword");
   const navigate = useNavigate();
   const [filter, setFilter] = useState("");
-  const handleSignOut = () => {
-    signOut(auth);
-    console.log("Sign out successfully!!!");
-  };
   const SearchKeywordHandler = debounce((e) => {
     if (e.type !== "click" && e.key !== "Enter") return;
     console.log("event", e);
@@ -129,9 +123,6 @@ const Header = () => {
               </strong>
               <Button height="56px" to="/dashboard">
                 Dashboard
-              </Button>
-              <Button onClick={handleSignOut} kind="secondary" height="56px">
-                Sign out
               </Button>
             </div>
           )}
