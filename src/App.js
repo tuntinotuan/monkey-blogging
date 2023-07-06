@@ -2,8 +2,9 @@ import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
 import { LoadingSpinner } from "components/loading";
-import SearchPage from "pages/SearchPage";
 const HomePage = React.lazy(() => import("pages/HomePage"));
+const SearchPage = React.lazy(() => import("pages/SearchPage"));
+const ContactPage = React.lazy(() => import("pages/ContactPage"));
 const SignInPage = React.lazy(() => import("pages/SignInPage"));
 const SignUpPage = React.lazy(() => import("pages/SignUpPage"));
 const PageNotFound = React.lazy(() => import("pages/PageNotFound"));
@@ -47,6 +48,10 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<HomePage></HomePage>}></Route>
+            <Route
+              path="/contact"
+              element={<ContactPage></ContactPage>}
+            ></Route>
             <Route
               path="/category/:slug"
               element={<CagetoryPage></CagetoryPage>}

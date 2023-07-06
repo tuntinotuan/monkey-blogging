@@ -19,6 +19,10 @@ const menuLinks = [
     url: "/contact",
     title: "Contact",
   },
+  {
+    url: "/help",
+    title: "Help",
+  },
 ];
 
 const HeaderStyles = styled.header`
@@ -76,7 +80,6 @@ const Header = () => {
   const [filter, setFilter] = useState("");
   const SearchKeywordHandler = debounce((e) => {
     if (e.type !== "click" && e.key !== "Enter") return;
-    console.log("event", e);
     navigate(`/search?keyword=${filter}`);
   }, 500);
   return (
@@ -89,7 +92,12 @@ const Header = () => {
           <ul className="menu">
             {menuLinks.map((item) => (
               <li className="menu-item" key={item.title}>
-                <NavLink to={item.url} className="menu-link">
+                <NavLink
+                  to={item.url}
+                  className={({ isActive }) =>
+                    isActive ? "text-primary font-bold" : ""
+                  }
+                >
                   {item.title}
                 </NavLink>
               </li>
