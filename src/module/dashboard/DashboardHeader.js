@@ -29,10 +29,10 @@ const DashboardHeader = () => {
   const { userInfo } = useAuth();
   const [darkMode, setDarkMode] = useDarkMode();
   return (
-    <DashboardHeaderStyles>
+    <DashboardHeaderStyles className="dark:bg-darkMain">
       <Toggle on={darkMode} onClick={() => setDarkMode(!darkMode)}></Toggle>
       <Button to="/manage/add-post" className="header-button" height="52px">
-        <p className="dark:text-gray-900">Write new post</p>
+        Write new post
       </Button>
       <NavLink to="/profile" className="header-avatar">
         <img src={userInfo?.avatar || imageSunflower} alt="" />

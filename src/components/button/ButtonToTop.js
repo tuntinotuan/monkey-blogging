@@ -16,6 +16,7 @@ const ButtonToTopStyles = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 100rem;
+  background-color: white;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease-in;
   ${(props) =>

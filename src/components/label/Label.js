@@ -9,7 +9,7 @@ const LabelStyles = styled.label`
 
 const Label = ({ htmlFor = "", children, ...props }) => {
   return (
-    <LabelStyles htmlFor={htmlFor} {...props}>
+    <LabelStyles htmlFor={htmlFor} className="dark:text-darkTextA0" {...props}>
       {children}
     </LabelStyles>
   );

@@ -28,8 +28,8 @@ const TableStyles = styled.div`
 `;
 const Table = ({ children }) => {
   return (
-    <TableStyles>
-      <table>{children}</table>
+    <TableStyles className="dark:bg-darkMain">
+      <table className="dark:bg-darkMain">{children}</table>
     </TableStyles>
   );
 };

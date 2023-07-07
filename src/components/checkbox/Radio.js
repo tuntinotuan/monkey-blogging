@@ -16,7 +16,7 @@ const Radio = ({ checked, children, control, name, ...rest }) => {
         {...field}
         {...rest}
       />
-      <div className="flex items-center gap-x-3 font-medium cursor-pointer">
+      <div className="flex items-center gap-x-3 font-medium dark:text-darkTextA0 dark:font-normal cursor-pointer">
         <div
           className={`w-7 h-7 rounded-full ${
             checked ? "bg-green-400" : "bg-gray-200"

@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
 import { LoadingSpinner } from "components/loading";
+import { useEffect } from "react";
+import useDarkMode from "hooks/useDarkMode";
 const HomePage = React.lazy(() => import("pages/HomePage"));
 const SearchPage = React.lazy(() => import("pages/SearchPage"));
 const ContactPage = React.lazy(() => import("pages/ContactPage"));
@@ -33,6 +35,12 @@ const CategoryAddNew = React.lazy(() =>
 );
 
 function App() {
+  const [darkMode, setDarkMode] = useDarkMode();
+  useEffect(() => {
+    setDarkMode(darkMode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
       <AuthProvider>

@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
-const CATEGORY_PER_PAGE = 1;
+const CATEGORY_PER_PAGE = 5;
 
 const CategoryManage = () => {
   const { userInfo } = useAuth();
@@ -125,7 +125,7 @@ const CategoryManage = () => {
         />
       </div>
       <Table>
-        <thead>
+        <thead className="dark:bg-darkMain dark:text-darkTextA0">
           <tr>
             <th>Id</th>
             <th>Name</th>
@@ -134,7 +134,7 @@ const CategoryManage = () => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="dark:text-darkTextA0">
           {categoryList.length > 0 &&
             categoryList.map((category) => (
               <tr key={category.id}>

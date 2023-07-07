@@ -5,6 +5,7 @@ import DashboardHeader from "./DashboardHeader";
 import Sidebar from "./Sidebar";
 import { useAuth } from "contexts/auth-context";
 import PageNotFound from "pages/PageNotFound";
+import { ButtonToTop } from "components/button";
 const DashboardStyles = styled.div`
   max-width: 1600px;
   margin: 0 auto;
@@ -33,7 +34,8 @@ const DashboardLayout = ({ children }) => {
   const { userInfo } = useAuth();
   if (!userInfo) return <PageNotFound></PageNotFound>;
   return (
-    <DashboardStyles>
+    <DashboardStyles className="dark:bg-darkMain">
+      <ButtonToTop kind="primary"></ButtonToTop>
       <DashboardHeader></DashboardHeader>
       <div className="dashboard-main">
         <Sidebar></Sidebar>

@@ -140,10 +140,10 @@ const sidebarLinks = [
 ];
 const Sidebar = () => {
   return (
-    <SidebarStyles className="sidebar">
+    <SidebarStyles className="dark:bg-darkMain sidebar">
       <Link className="sidebar-logo" to="/">
         <img srcSet="/logo.png 2x" alt="" />
-        <span>Monkey Blogging</span>
+        <span className="dark:text-darkPrimary">Monkey Blogging</span>
       </Link>
       {sidebarLinks.map((link) => (
         <NavLink

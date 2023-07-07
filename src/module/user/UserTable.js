@@ -180,7 +180,7 @@ const UserTable = () => {
         </div>
       </div>
       <Table>
-        <thead>
+        <thead className="dark:bg-darkMain dark:text-darkTextA0">
           <tr>
             <th>Id</th>
             <th>Info</th>
@@ -191,7 +191,7 @@ const UserTable = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="dark:text-darkTextA0">
           {userList.length > 0 && userList.map((user) => renderUserItem(user))}
         </tbody>
       </Table>

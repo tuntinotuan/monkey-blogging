@@ -211,7 +211,7 @@ const PostUpdate = () => {
         <div className="mb-10">
           <Field>
             <Label>Content</Label>
-            <div className="w-full">
+            <div className="w-full dark:text-white">
               <ReactQuill
                 theme="snow"
                 value={content}

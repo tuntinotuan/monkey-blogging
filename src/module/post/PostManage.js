@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postStatus } from "utils/constants";
 
-const POST_PER_PAGE = 1;
+const POST_PER_PAGE = 5;
 
 const PostManage = () => {
   const navigate = useNavigate();
@@ -132,7 +132,7 @@ const PostManage = () => {
         </div>
       </div>
       <Table>
-        <thead>
+        <thead className="dark:text-darkTextA0 dark:bg-darkMain">
           <tr>
             <th>Id</th>
             <th>Post</th>
@@ -142,7 +142,7 @@ const PostManage = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="dark:text-darkTextA0">
           {postList.length > 0 &&
             postList.map((post) => (
               <tr>
