@@ -5,6 +5,7 @@ import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
 import slugify from "slugify";
+import { Link } from "react-router-dom";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -62,13 +63,9 @@ const PostFeatureItem = ({ data }) => {
   const { category, user } = data;
   return (
     <PostFeatureItemStyles>
-      <PostImage
-        url={data.image}
-        alt="unsplash"
-        to={`/${data.slug}`}
-      ></PostImage>
+      <PostImage url={data.image} alt="unsplash" to={data.slug}></PostImage>
       <div className="post-overlay"></div>
-      <div className="post-content">
+      <div className="post-content overflow-hidden">
         <div className="post-top">
           {category?.name && (
             <PostCategory to={category.slug}>{category.name}</PostCategory>
@@ -79,9 +76,13 @@ const PostFeatureItem = ({ data }) => {
             date={formatDate}
           ></PostMeta>
         </div>
-        <PostTitle size="big" to={data.slug}>
-          {data.title}
-        </PostTitle>
+        <Link to={data.slug}>
+          <div className="h-full cursor-pointer">
+            <PostTitle size="big" to={data.slug}>
+              {data.title}
+            </PostTitle>
+          </div>
+        </Link>
       </div>
     </PostFeatureItemStyles>
   );

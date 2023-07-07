@@ -21,7 +21,10 @@ const PostTitleStyles = styled.div`
 
 const PostTitle = ({ children, className = "", size = "normal", to = "" }) => {
   return (
-    <PostTitleStyles size={size} className={`post-title ${className}`}>
+    <PostTitleStyles
+      size={size}
+      className={`post-title dark:text-white ${className}`}
+    >
       <Link to={`/${to}`}>{children}</Link>
     </PostTitleStyles>
   );

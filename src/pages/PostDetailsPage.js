@@ -109,7 +109,9 @@ const PostDetailsPage = () => {
               <PostCategory className="mb-6" to={postData?.category?.slug}>
                 {postData?.category?.name}
               </PostCategory>
-              <h1 className="post-heading">{postData?.title}</h1>
+              <h1 className="post-heading dark:text-white">
+                {postData?.title}
+              </h1>
               <PostMeta
                 date={new Date(
                   postData?.createdAt?.seconds * 1000

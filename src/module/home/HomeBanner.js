@@ -5,13 +5,15 @@ import styled from "styled-components";
 
 const HomeBannerStyles = styled.div`
   min-height: 520px;
-  padding: 40px 0;
   margin-bottom: 60px;
   background-image: linear-gradient(
     to right bottom,
     ${(props) => props.theme.primary},
     ${(props) => props.theme.secondary}
   );
+  div {
+    padding: 20px 0;
+  }
   .banner {
     display: flex;
     justify-content: space-between;
@@ -36,23 +38,26 @@ const HomeBanner = () => {
   const { userInfo } = useAuth();
   return (
     <HomeBannerStyles>
-      <div className="container">
-        <div className="banner">
-          <div className="banner-content">
-            <h1 className="banner-heading">Monkey Blogging</h1>
-            <p className="banner-desc">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-              libero, modi sit voluptatem harum ullam ipsum sint, dicta non, ut
-              quisquam et quod delectus rem nemo fugit voluptates impedit est.
-            </p>
-            {!userInfo && (
-              <Button to="/sign-in" kind="secondary">
-                Get Started
-              </Button>
-            )}
-          </div>
-          <div className="banner-image">
-            <img srcSet="/img-banner.png 2x" alt="banner" />
+      <div className="dark:bg-darkMain">
+        <div className="container dark:bg-gradient-to-r from-gray-800 to-darkMain dark:rounded-2xl dark:px-5">
+          <div className="banner">
+            <div className="banner-content">
+              <h1 className="banner-heading">Monkey Blogging</h1>
+              <p className="banner-desc">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
+                libero, modi sit voluptatem harum ullam ipsum sint, dicta non,
+                ut quisquam et quod delectus rem nemo fugit voluptates impedit
+                est.
+              </p>
+              {!userInfo && (
+                <Button to="/sign-in" kind="secondary">
+                  Get Started
+                </Button>
+              )}
+            </div>
+            <div className="banner-image">
+              <img srcSet="/img-banner.png 2x" alt="banner" />
+            </div>
           </div>
         </div>
       </div>

@@ -95,7 +95,9 @@ const Header = () => {
                 <NavLink
                   to={item.url}
                   className={({ isActive }) =>
-                    isActive ? "text-primary font-bold" : ""
+                    isActive
+                      ? "text-primary font-bold"
+                      : "dark:text-white dark:font-thin"
                   }
                 >
                   {item.title}
@@ -103,10 +105,10 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          <div className="search">
+          <div className="search dark:bg-gray-800 dark:!border-none">
             <input
               type="text"
-              className="search-input"
+              className="search-input dark:bg-gray-800 dark:text-white dark:outline-gray-800"
               placeholder="Search posts..."
               defaultValue={keywordSearch}
               onChange={(e) => setFilter(e.target.value)}
@@ -125,7 +127,7 @@ const Header = () => {
             </Button>
           ) : (
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span>Welcome to, </span>
+              <span className="dark:text-white">Welcome to, </span>
               <strong className="text-primary">
                 {getLastName(userInfo?.displayName)}
               </strong>

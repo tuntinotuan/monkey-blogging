@@ -18,7 +18,11 @@ const HeadingStyles = styled.h2`
   }
 `;
 const Heading = ({ className = "", children }) => {
-  return <HeadingStyles className={className}>{children}</HeadingStyles>;
+  return (
+    <HeadingStyles className={`dark:text-white ${className}`}>
+      {children}
+    </HeadingStyles>
+  );
 };
 
 export default Heading;

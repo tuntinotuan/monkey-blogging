@@ -33,7 +33,7 @@ const PageNotFound = () => {
       <NavLink to="/">
         <img srcSet="/logo.png 2x" alt="Monkey Blogging" className="logo" />
       </NavLink>
-      <h1 className="heading">Oops! Page not found</h1>
+      <h1 className="heading dark:text-white">Oops! Page not found</h1>
       <NavLink to="/" className={"back"}>
         Back to home
       </NavLink>

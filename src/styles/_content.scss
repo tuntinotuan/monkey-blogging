@@ -1,5 +1,6 @@
 .entry-content,
 .entry-content .ql-editor {
+  @apply dark:text-white;
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
   h2,

@@ -27,7 +27,7 @@ const PostMeta = ({
   to = "",
 }) => {
   return (
-    <PostMetaStyles className={`post-meta ${className}`}>
+    <PostMetaStyles className={`post-meta dark:text-darkTextA0 ${className}`}>
       <span className="post-time">{date}</span>
       <span className="post-dot"></span>
       <Link to={`/author/${to}`}>

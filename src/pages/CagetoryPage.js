@@ -34,7 +34,9 @@ const CagetoryPage = () => {
     <CagetoryPageStyles>
       <Layout>
         <div className="container">
-          <Heading>{`Danh mục ${slug}`}</Heading>
+          <Heading>
+            Danh mục <span className="text-darkPrimary font-bold">{slug}</span>
+          </Heading>
           <div className="grid-layout grid-layout--primary">
             {data.length > 0 &&
               data.map((item) => (

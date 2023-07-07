@@ -15,11 +15,11 @@ const PostImageStyles = styled.div`
 const PostImage = ({ url = "", alt = "unsplash", className = "", to = "" }) => {
   if (to)
     return (
-      <Link to={`/${to}`}>
-        <PostImageStyles className={`post-image ${className}`}>
+      <PostImageStyles className={`post-image ${className}`}>
+        <Link to={`/${to}`} className="rounded-2xl">
           <img src={url} alt={alt} />
-        </PostImageStyles>
-      </Link>
+        </Link>
+      </PostImageStyles>
     );
   return (
     <PostImageStyles className={`post-image ${className}`}>

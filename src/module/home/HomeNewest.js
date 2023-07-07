@@ -58,7 +58,7 @@ const HomeNewest = () => {
         <Heading>Mới nhất</Heading>
         <div className="layout">
           <PostNewestLarge data={first}></PostNewestLarge>
-          <div className="sidebar">
+          <div className="sidebar dark:!bg-gray-800">
             {other.length > 0 &&
               other.map((post) => (
                 <PostNewestItem data={post}></PostNewestItem>
