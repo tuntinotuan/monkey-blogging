@@ -1,5 +1,5 @@
 import { Button } from "components/button";
-import Toggle from "components/toggle/Toggle";
+import ToggleDarkMode from "components/toggle/ToggleDarkMode";
 import { useAuth } from "contexts/auth-context";
 import useDarkMode from "hooks/useDarkMode";
 import React from "react";
@@ -30,7 +30,10 @@ const DashboardHeader = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   return (
     <DashboardHeaderStyles className="dark:bg-darkMain">
-      <Toggle on={darkMode} onClick={() => setDarkMode(!darkMode)}></Toggle>
+      <ToggleDarkMode
+        on={darkMode}
+        onClick={() => setDarkMode(!darkMode)}
+      ></ToggleDarkMode>
       <Button to="/manage/add-post" className="header-button" height="52px">
         Write new post
       </Button>
