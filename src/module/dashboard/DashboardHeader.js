@@ -1,5 +1,7 @@
 import { Button } from "components/button";
+import Toggle from "components/toggle/Toggle";
 import { useAuth } from "contexts/auth-context";
+import useDarkMode from "hooks/useDarkMode";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -25,10 +27,12 @@ const DashboardHeaderStyles = styled.div`
 
 const DashboardHeader = () => {
   const { userInfo } = useAuth();
+  const [darkMode, setDarkMode] = useDarkMode();
   return (
     <DashboardHeaderStyles>
+      <Toggle on={darkMode} onClick={() => setDarkMode(!darkMode)}></Toggle>
       <Button to="/manage/add-post" className="header-button" height="52px">
-        Write new post
+        <p className="dark:text-gray-900">Write new post</p>
       </Button>
       <NavLink to="/profile" className="header-avatar">
         <img src={userInfo?.avatar || imageSunflower} alt="" />
