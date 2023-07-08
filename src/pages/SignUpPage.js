@@ -108,7 +108,7 @@ const SignUpPage = () => {
           <Label htmlFor="password">Password</Label>
           <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
-        <div className="have-account">
+        <div className="have-account dark:text-darkTextA0">
           You already have an account? <NavLink to="/sign-in">Sign in</NavLink>
         </div>
         <Button

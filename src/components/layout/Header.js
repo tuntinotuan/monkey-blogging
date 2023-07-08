@@ -79,6 +79,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("");
   const SearchKeywordHandler = debounce((e) => {
+    if (filter === "") return;
     if (e.type !== "click" && e.key !== "Enter") return;
     navigate(`/search?keyword=${filter}`);
   }, 500);

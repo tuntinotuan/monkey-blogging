@@ -41,7 +41,7 @@ const HomeBanner = () => {
       <div className="dark:bg-darkMain">
         <div className="container dark:bg-gradient-to-r from-gray-800 to-darkMain dark:rounded-2xl dark:px-5">
           <div className="banner">
-            <div className="banner-content">
+            <div className="banner-content dark:text-center">
               <h1 className="banner-heading">Monkey Blogging</h1>
               <p className="banner-desc">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
@@ -50,7 +50,7 @@ const HomeBanner = () => {
                 est.
               </p>
               {!userInfo && (
-                <Button to="/sign-in" kind="secondary">
+                <Button to="/sign-in" kind="secondary" className="dark:mx-auto">
                   Get Started
                 </Button>
               )}
