@@ -1,6 +1,10 @@
 import React from "react";
 
-const IconMoon = ({ className = "", onClick = () => {} }) => {
+const IconMoon = ({
+  className = "",
+  onClick = () => {},
+  color = "text-[#fff]",
+}) => {
   return (
     <span className={className} onClick={onClick}>
       <svg
@@ -9,7 +13,7 @@ const IconMoon = ({ className = "", onClick = () => {} }) => {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className="w-6 h-6 text-white"
+        className={`w-6 h-6 ${color}`}
       >
         <path
           strokeLinecap="round"

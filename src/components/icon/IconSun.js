@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconSun = ({ className = "", onClick = () => {} }) => {
+const IconSun = ({ className = "", onClick = () => {}, color = "" }) => {
   return (
     <span className={className} onClick={onClick}>
       <svg
@@ -9,7 +9,7 @@ const IconSun = ({ className = "", onClick = () => {} }) => {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className="w-6 h-6"
+        className={`w-6 h-6 text-[${color}]`}
       >
         <path
           strokeLinecap="round"
