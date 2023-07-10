@@ -23,6 +23,7 @@ import { deleteUser } from "firebase/auth";
 import { toast } from "react-toastify";
 import { Button } from "components/button";
 import { debounce } from "lodash";
+import { NotFoundData } from "components/notfound";
 
 const USER_PER_PAGE = 5;
 
@@ -179,23 +180,28 @@ const UserTable = () => {
           />
         </div>
       </div>
-      <Table>
-        <thead className="dark:bg-darkMain dark:text-darkTextA0">
-          <tr>
-            <th>Id</th>
-            <th>Info</th>
-            <th>Username</th>
-            <th>Email address</th>
-            <th>Status</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody className="dark:text-darkTextA0">
-          {userList.length > 0 && userList.map((user) => renderUserItem(user))}
-        </tbody>
-      </Table>
-      {userList.length < total && (
+      {userList.length > 0 ? (
+        <Table>
+          <thead className="dark:bg-darkMain dark:text-darkTextA0">
+            <tr>
+              <th>Id</th>
+              <th>Info</th>
+              <th>Username</th>
+              <th>Email address</th>
+              <th>Status</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody className="dark:text-darkTextA0">
+            {userList.length > 0 &&
+              userList.map((user) => renderUserItem(user))}
+          </tbody>
+        </Table>
+      ) : (
+        <NotFoundData size="medium"></NotFoundData>
+      )}
+      {userList.length < total && userList.length > 0 && (
         <Button kind="ghost" className="mx-auto" onClick={handleLoadMoreUser}>
           Load more
         </Button>

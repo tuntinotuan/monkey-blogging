@@ -10,7 +10,6 @@ const CardOverview = ({
   to = "/",
 }) => {
   const [hover, setHover] = useState(false);
-  console.log("hover", hover);
   return (
     <div
       className={`flex flex-col justify-between w-full h-[200px] text-white rounded-3xl transition-all p-7 ${bgColor}`}
@@ -20,11 +19,7 @@ const CardOverview = ({
           className={`transition-all ${
             hover ? "customize-bounce opacity-100" : "opacity-0"
           }`}
-        >
-          {/* <span className="absolute bottom-1/2 right-[18%] text-[5px]">
-            Let's go
-          </span> */}
-        </IconLongArrow>
+        ></IconLongArrow>
         <Link
           to={to}
           className={`flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-xl`}

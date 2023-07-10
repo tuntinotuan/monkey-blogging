@@ -1,6 +1,7 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import { LabelStatus } from "components/label";
+import { NotFoundData } from "components/notfound";
 import { Table } from "components/table";
 import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
@@ -124,53 +125,57 @@ const CategoryManage = () => {
           onChange={handleSearchCategory}
         />
       </div>
-      <Table>
-        <thead className="dark:bg-darkMain dark:text-darkTextA0">
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Slug</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody className="dark:text-darkTextA0">
-          {categoryList.length > 0 &&
-            categoryList.map((category) => (
-              <tr key={category.id}>
-                <td>{category.id}</td>
-                <td>{category.name}</td>
-                <td>
-                  <em className="text-gray-400">{category.slug}</em>
-                </td>
-                <td>
-                  {Number(category.status) === categoryStatus.APPROVED && (
-                    <LabelStatus type="success">Approved</LabelStatus>
-                  )}
-                  {Number(category.status) === categoryStatus.UNAPPROVED && (
-                    <LabelStatus type="warning">Unapproved</LabelStatus>
-                  )}
-                </td>
-                <td>
-                  <div className="flex gap-3 text-gray-400">
-                    <ActionView></ActionView>
-                    <ActionEdit
-                      onClick={() =>
-                        navigate(`/manage/update-category?id=${category.id}`)
-                      }
-                    ></ActionEdit>
-                    <ActionDelete
-                      onClick={() =>
-                        handleDeleteCategory(category.id, category.name)
-                      }
-                    ></ActionDelete>
-                  </div>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-      {categoryList.length < total && (
+      {categoryList.length > 0 ? (
+        <Table>
+          <thead className="dark:bg-darkMain dark:text-darkTextA0">
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody className="dark:text-darkTextA0">
+            {categoryList.length > 0 &&
+              categoryList.map((category) => (
+                <tr key={category.id}>
+                  <td>{category.id}</td>
+                  <td>{category.name}</td>
+                  <td>
+                    <em className="text-gray-400">{category.slug}</em>
+                  </td>
+                  <td>
+                    {Number(category.status) === categoryStatus.APPROVED && (
+                      <LabelStatus type="success">Approved</LabelStatus>
+                    )}
+                    {Number(category.status) === categoryStatus.UNAPPROVED && (
+                      <LabelStatus type="warning">Unapproved</LabelStatus>
+                    )}
+                  </td>
+                  <td>
+                    <div className="flex gap-3 text-gray-400">
+                      <ActionView></ActionView>
+                      <ActionEdit
+                        onClick={() =>
+                          navigate(`/manage/update-category?id=${category.id}`)
+                        }
+                      ></ActionEdit>
+                      <ActionDelete
+                        onClick={() =>
+                          handleDeleteCategory(category.id, category.name)
+                        }
+                      ></ActionDelete>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      ) : (
+        <NotFoundData size="medium"></NotFoundData>
+      )}
+      {categoryList.length < total && categoryList.length > 0 && (
         <Button
           kind="ghost"
           className="mx-auto"

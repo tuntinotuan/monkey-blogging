@@ -1,6 +1,7 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import { LabelStatus } from "components/label";
+import { NotFoundData } from "components/notfound";
 import { Table } from "components/table";
 import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
@@ -131,70 +132,76 @@ const PostManage = () => {
           />
         </div>
       </div>
-      <Table>
-        <thead className="dark:text-darkTextA0 dark:bg-darkMain">
-          <tr>
-            <th>Id</th>
-            <th>Post</th>
-            <th>Category</th>
-            <th>Author</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody className="dark:text-darkTextA0">
-          {postList.length > 0 &&
-            postList.map((post) => (
-              <tr>
-                <td>{post.id.slice(0, 5) + "..."}</td>
-                <td>
-                  <div className="flex items-center gap-x-3">
-                    <img
-                      src={post.image}
-                      alt=""
-                      className="w-[66px] h-[55px] rounded object-cover"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold max-w-[200px] whitespace-pre-wrap line-clamp-3">
-                        {post.title}
-                      </h3>
-                      <time className="text-sm text-gray-500">
-                        Date:
-                        {new Date(
-                          post?.createdAt?.seconds * 1000
-                        ).toLocaleDateString("vi-VI")}
-                      </time>
+      {postList.length > 0 ? (
+        <Table>
+          <thead className="dark:text-darkTextA0 dark:bg-darkMain">
+            <tr>
+              <th>Id</th>
+              <th>Post</th>
+              <th>Category</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody className="dark:text-darkTextA0">
+            {postList.length > 0 &&
+              postList.map((post) => (
+                <tr>
+                  <td>{post.id.slice(0, 5) + "..."}</td>
+                  <td>
+                    <div className="flex items-center gap-x-3">
+                      <img
+                        src={post.image}
+                        alt=""
+                        className="w-[66px] h-[55px] rounded object-cover"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-semibold max-w-[200px] whitespace-pre-wrap line-clamp-3">
+                          {post.title}
+                        </h3>
+                        <time className="text-sm text-gray-500">
+                          Date:
+                          {new Date(
+                            post?.createdAt?.seconds * 1000
+                          ).toLocaleDateString("vi-VI")}
+                        </time>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <span className="text-gray-500">{post?.category.name}</span>
-                </td>
-                <td>
-                  <span className="text-gray-500">{post?.user?.fullname}</span>
-                </td>
-                <td>{renderPostStatus(post.status)}</td>
-                <td>
-                  <div className="flex items-center gap-x-3 text-gray-500">
-                    <ActionView
-                      onClick={() => navigate(`/${post.slug}`)}
-                    ></ActionView>
-                    <ActionEdit
-                      onClick={() =>
-                        navigate(`/manage/update-post?id=${post.id}`)
-                      }
-                    ></ActionEdit>
-                    <ActionDelete
-                      onClick={() => handleDeletePost(post.id, post.title)}
-                    ></ActionDelete>
-                  </div>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+                  </td>
+                  <td>
+                    <span className="text-gray-500">{post?.category.name}</span>
+                  </td>
+                  <td>
+                    <span className="text-gray-500">
+                      {post?.user?.fullname}
+                    </span>
+                  </td>
+                  <td>{renderPostStatus(post.status)}</td>
+                  <td>
+                    <div className="flex items-center gap-x-3 text-gray-500">
+                      <ActionView
+                        onClick={() => navigate(`/${post.slug}`)}
+                      ></ActionView>
+                      <ActionEdit
+                        onClick={() =>
+                          navigate(`/manage/update-post?id=${post.id}`)
+                        }
+                      ></ActionEdit>
+                      <ActionDelete
+                        onClick={() => handleDeletePost(post.id, post.title)}
+                      ></ActionDelete>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      ) : (
+        filter && <NotFoundData size="medium"></NotFoundData>
+      )}
       <div className="mt-10">
-        {total > postList.length && (
+        {total > postList.length && postList.length > 0 && (
           <Button
             className="mx-auto w-[200px]"
             onClick={() => handleLoadMorePost()}
