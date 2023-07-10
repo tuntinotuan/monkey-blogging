@@ -139,11 +139,13 @@ const DashboardPage = () => {
             to=""
           ></StatusItem>
           <StatusItem
+            children="Pending"
             textColor="text-orange-500"
             figures={pendingPost}
             to=""
           ></StatusItem>
           <StatusItem
+            children="Reject"
             textColor="text-red-500"
             figures={rejectPost}
             to=""
@@ -167,16 +169,19 @@ const DashboardPage = () => {
           title="Status User"
         >
           <StatusItem
+            children="Active"
             textColor="text-green-500"
             figures={activeUser}
             to=""
           ></StatusItem>
           <StatusItem
+            children="Pending"
             textColor="text-orange-500"
             figures={pendingUser}
             to=""
           ></StatusItem>
           <StatusItem
+            children="Banned"
             textColor="text-red-500"
             figures={sizeUser - activeUser - pendingUser}
             to=""
@@ -184,16 +189,19 @@ const DashboardPage = () => {
         </CardStatus>
         <CardStatus title="Role User">
           <StatusItem
+            children="Admin"
             textColor="text-green-500"
             figures={adminUser}
             to=""
           ></StatusItem>
           <StatusItem
+            children="Moderator"
             textColor="text-orange-500"
             figures={modUser}
             to=""
           ></StatusItem>
           <StatusItem
+            children="User"
             textColor="text-red-500"
             figures={sizeUser - adminUser - modUser}
             to=""
@@ -217,6 +225,7 @@ const DashboardPage = () => {
             to=""
           ></StatusItem>
           <StatusItem
+            children="Unapproved"
             textColor="text-red-500"
             figures={sizeCategory - approvedCategory}
             to=""

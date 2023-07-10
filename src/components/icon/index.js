@@ -6,6 +6,7 @@ import IconMoon from "./IconMoon";
 import IconStar from "./IconStar";
 import IconCloud from "./IconCloud";
 import IconDocument from "./IconDocument";
+import IconLongArrow from "./IconLongArrow";
 
 export {
   IconEyeOpen,
@@ -16,4 +17,5 @@ export {
   IconStar,
   IconCloud,
   IconDocument,
+  IconLongArrow,
 };
