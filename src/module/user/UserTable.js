@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { Button } from "components/button";
 import { debounce } from "lodash";
 import { NotFoundData } from "components/notfound";
+import { InputSearchDashboard } from "components/input";
 
 const USER_PER_PAGE = 5;
 
@@ -170,15 +171,11 @@ const UserTable = () => {
   );
   return (
     <div>
-      <div className="mb-10 flex justify-end">
-        <div className="w-full max-w-[300px]">
-          <input
-            type="text"
-            className="w-full p-4 rounded-lg border border-solid border-gray-300"
-            placeholder="Search User..."
-            onChange={handleSearchUser}
-          />
-        </div>
+      <div className="flex justify-end my-5">
+        <InputSearchDashboard
+          placeholder="Search user..."
+          onChange={handleSearchUser}
+        ></InputSearchDashboard>
       </div>
       {userList.length > 0 ? (
         <Table>
@@ -199,7 +196,7 @@ const UserTable = () => {
           </tbody>
         </Table>
       ) : (
-        <NotFoundData size="medium"></NotFoundData>
+        filter && <NotFoundData size="medium"></NotFoundData>
       )}
       {userList.length < total && userList.length > 0 && (
         <Button kind="ghost" className="mx-auto" onClick={handleLoadMoreUser}>

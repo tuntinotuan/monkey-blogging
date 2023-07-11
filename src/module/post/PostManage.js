@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
+import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
 import { NotFoundData } from "components/notfound";
 import { Table } from "components/table";
@@ -77,6 +78,7 @@ const PostManage = () => {
             ...doc.data(),
           });
         });
+        if (results.length === 0) setFilter("abc");
         setPostList(results);
       });
       setCurrentdocument(lastVisible);
@@ -122,15 +124,11 @@ const PostManage = () => {
         title="All posts"
         desc="Manage all posts"
       ></DashboardHeading>
-      <div className="mb-10 flex justify-end">
-        <div className="w-full max-w-[300px]">
-          <input
-            type="text"
-            className="w-full p-4 rounded-lg border border-solid border-gray-300"
-            placeholder="Search post..."
-            onChange={handleSearchPost}
-          />
-        </div>
+      <div className="flex justify-end my-5">
+        <InputSearchDashboard
+          placeholder="Search post..."
+          onChange={handleSearchPost}
+        ></InputSearchDashboard>
       </div>
       {postList.length > 0 ? (
         <Table>

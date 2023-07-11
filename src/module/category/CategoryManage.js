@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
+import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
 import { NotFoundData } from "components/notfound";
 import { Table } from "components/table";
@@ -118,12 +119,10 @@ const CategoryManage = () => {
         </Button>
       </DashboardHeading>
       <div className="flex justify-end my-5">
-        <input
-          type="text"
+        <InputSearchDashboard
           placeholder="Search category..."
-          className="ml-auto border border-gray-300 rounded-full py-3 px-4"
           onChange={handleSearchCategory}
-        />
+        ></InputSearchDashboard>
       </div>
       {categoryList.length > 0 ? (
         <Table>
@@ -173,7 +172,7 @@ const CategoryManage = () => {
           </tbody>
         </Table>
       ) : (
-        <NotFoundData size="medium"></NotFoundData>
+        categoryFilter && <NotFoundData size="medium"></NotFoundData>
       )}
       {categoryList.length < total && categoryList.length > 0 && (
         <Button
