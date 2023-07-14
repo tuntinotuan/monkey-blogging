@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const StatusItem = ({ children, textColor = "", figures, to = "" }) => {
   return (
@@ -15,7 +16,7 @@ const StatusItem = ({ children, textColor = "", figures, to = "" }) => {
           className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-100 ${textColor}`}
         ></span>
       </span>
-      <p className={`font-semibold`}>{figures}</p>
+      <p className={`font-semibold`}>{figures || 0}</p>
     </Link>
   );
 };
@@ -29,5 +30,12 @@ function StatusChildren({ children = "Approved", textColor }) {
     </div>
   );
 }
+
+StatusItem.propTypes = {
+  children: PropTypes.node,
+  textColor: PropTypes.string,
+  figures: PropTypes.number,
+  to: PropTypes.string,
+};
 
 export default StatusItem;

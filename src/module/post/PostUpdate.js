@@ -156,7 +156,7 @@ const PostUpdate = () => {
       <form onSubmit={handleSubmit(updatePostHandler)}>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
-            <Label>Title</Label>
+            <Label htmlFor="title">Title</Label>
             <Input
               control={control}
               placeholder="Enter your title"
@@ -164,7 +164,7 @@ const PostUpdate = () => {
             ></Input>
           </Field>
           <Field>
-            <Label>Slug</Label>
+            <Label htmlFor="slug">Slug</Label>
             <Input
               control={control}
               placeholder="Enter your slug"

@@ -51,7 +51,7 @@ const UserProfile = () => {
       const docSnap = await getDoc(colRef);
       reset(docSnap.data());
     }
-    fetchUser();
+    if (userInfo.uid) fetchUser();
   }, [userInfo.uid, reset]);
   useEffect(() => {
     setImage(imageUrl);
@@ -115,7 +115,7 @@ const UserProfile = () => {
         </div>
         <div className="form-layout">
           <Field>
-            <Label>Fullname</Label>
+            <Label htmlFor="fullname">Fullname</Label>
             <Input
               control={control}
               name="fullname"
@@ -123,7 +123,7 @@ const UserProfile = () => {
             ></Input>
           </Field>
           <Field>
-            <Label>Username</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
               control={control}
               name="username"
@@ -133,7 +133,7 @@ const UserProfile = () => {
         </div>
         <div className="form-layout">
           <Field>
-            <Label>Date of Birth</Label>
+            <Label htmlFor="birthday">Date of Birth</Label>
             <Input
               control={control}
               name="birthday"
@@ -141,7 +141,7 @@ const UserProfile = () => {
             ></Input>
           </Field>
           <Field>
-            <Label>Mobile Number</Label>
+            <Label htmlFor="phone">Mobile Number</Label>
             <Input
               control={control}
               name="phone"
@@ -151,7 +151,7 @@ const UserProfile = () => {
         </div>
         <div className="form-layout">
           <Field>
-            <Label>Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               control={control}
               name="email"
@@ -160,7 +160,7 @@ const UserProfile = () => {
             ></Input>
           </Field>
           <Field>
-            <Label>Description</Label>
+            <Label htmlFor="description">Description</Label>
             <Textarea
               name="description"
               control={control}
@@ -170,7 +170,7 @@ const UserProfile = () => {
         </div>
         <div className="form-layout">
           <Field>
-            <Label>New Password</Label>
+            <Label htmlFor="newPassword">New Password</Label>
             <InputPasswordToggle
               control={control}
               name="newPassword"
@@ -178,7 +178,7 @@ const UserProfile = () => {
             ></InputPasswordToggle>
           </Field>
           <Field>
-            <Label>Confirm Password</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
             <InputPasswordToggle
               control={control}
               name="confirmPassword"

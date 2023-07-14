@@ -2,13 +2,9 @@ import { IconDocument, IconLongArrow } from "components/icon";
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const CardOverview = ({
-  bgColor = "bg-darkPrimary",
-  size = "oo",
-  text = "Current Any",
-  to = "/",
-}) => {
+const CardOverview = ({ bgColor, size, text, to }) => {
   const [hover, setHover] = useState(false);
   return (
     <div
@@ -35,6 +31,20 @@ const CardOverview = ({
       </div>
     </div>
   );
+};
+
+CardOverview.propTypes = {
+  bgColor: PropTypes.string,
+  size: PropTypes.number,
+  text: PropTypes.string,
+  to: PropTypes.string,
+};
+
+CardOverview.defaultProps = {
+  bgColor: "bg-darkPrimary",
+  size: 0,
+  text: "Current Any",
+  to: "/",
 };
 
 export default CardOverview;

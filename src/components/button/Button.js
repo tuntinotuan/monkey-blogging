@@ -79,7 +79,7 @@ Button.propTypes = {
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
   children: PropTypes.node,
-  kind: PropTypes.oneOf(["secondary", "ghost", "or default is primary"]),
+  kind: PropTypes.oneOf(["secondary", "ghost", "primary"]),
 };
 
 export default Button;

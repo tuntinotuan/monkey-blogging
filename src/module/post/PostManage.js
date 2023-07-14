@@ -145,7 +145,7 @@ const PostManage = () => {
           <tbody className="dark:text-darkTextA0">
             {postList.length > 0 &&
               postList.map((post) => (
-                <tr>
+                <tr key={post.id}>
                   <td>{post.id.slice(0, 5) + "..."}</td>
                   <td>
                     <div className="flex items-center gap-x-3">

@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
 const NotFoundDataStyles = styled.div`
   display: flex;
@@ -45,6 +46,10 @@ const NotFoundData = ({ size = "big" }) => {
       </div>
     </NotFoundDataStyles>
   );
+};
+
+NotFoundData.propTypes = {
+  size: PropTypes.oneOf(["big", "medium"]).isRequired,
 };
 
 export default NotFoundData;

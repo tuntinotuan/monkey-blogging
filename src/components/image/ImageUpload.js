@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import PropType from "prop-types";
+import PropTypes from "prop-types";
 
 const ImageUpload = (props) => {
   const {
@@ -72,10 +72,11 @@ const ImageUpload = (props) => {
 };
 
 ImageUpload.propTypes = {
-  name: PropType.string,
-  className: PropType.string,
-  progress: PropType.number,
-  image: PropType.string,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  progress: PropTypes.number,
+  image: PropTypes.string,
+  handleDeleteImage: PropTypes.func,
 };
 
 export default ImageUpload;

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+
 const TableStyles = styled.div`
   overflow-x: auto;
   background-color: white;
@@ -32,6 +34,10 @@ const Table = ({ children }) => {
       <table className="dark:bg-darkMain">{children}</table>
     </TableStyles>
   );
+};
+
+Table.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default Table;

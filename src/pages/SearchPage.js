@@ -47,7 +47,7 @@ const SearchPage = () => {
               ))}
           </div>
         ) : (
-          <NotFoundData></NotFoundData>
+          <NotFoundData size="big"></NotFoundData>
         )}
       </div>
     </Layout>

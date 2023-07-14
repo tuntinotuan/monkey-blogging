@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const SpinnerStyles = styled.div`
   z-index: 1000;
@@ -30,6 +31,12 @@ const LoadingSpinner = ({
       borderColor={borderColor}
     ></SpinnerStyles>
   );
+};
+
+LoadingSpinner.propTypes = {
+  size: PropTypes.string,
+  borderSize: PropTypes.string,
+  borderColor: PropTypes.string,
 };
 
 export default LoadingSpinner;

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
 const ButtonToTopStyles = styled.button`
   position: fixed;
@@ -36,7 +37,7 @@ const ButtonToTopStyles = styled.button`
     `};
 `;
 
-const ButtonToTop = ({ type = "button", kind = "default", ...props }) => {
+const ButtonToTop = ({ type, kind, ...props }) => {
   const [offset, setOffset] = useState(0);
   useEffect(() => {
     const onScroll = () => setOffset(window.scrollY);
@@ -72,6 +73,16 @@ const ButtonToTop = ({ type = "button", kind = "default", ...props }) => {
     </ButtonToTopStyles>,
     document.querySelector("body")
   );
+};
+
+ButtonToTop.propTypes = {
+  type: PropTypes.string,
+  kind: PropTypes.string,
+};
+
+ButtonToTop.defaultProps = {
+  type: "button",
+  kind: "default",
 };
 
 export default ButtonToTop;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const InputSearchDashboard = ({
   className,
@@ -15,6 +16,12 @@ const InputSearchDashboard = ({
       />
     </div>
   );
+};
+
+InputSearchDashboard.propTypes = {
+  className: PropTypes.string,
+  placeholder: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default InputSearchDashboard;

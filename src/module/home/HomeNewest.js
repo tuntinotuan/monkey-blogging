@@ -61,7 +61,7 @@ const HomeNewest = () => {
           <div className="sidebar dark:!bg-gray-800">
             {other.length > 0 &&
               other.map((post) => (
-                <PostNewestItem data={post}></PostNewestItem>
+                <PostNewestItem data={post} key={post.id}></PostNewestItem>
               ))}
           </div>
         </div>

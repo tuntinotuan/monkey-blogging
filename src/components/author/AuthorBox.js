@@ -14,7 +14,7 @@ const AuthorBox = ({ userId = "" }) => {
       const docSnap = await getDoc(colRef);
       setUserData(docSnap.data());
     }
-    fetchUserData();
+    if (userId) fetchUserData();
   }, [userId]);
 
   if (!userId) return;

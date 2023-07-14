@@ -76,13 +76,12 @@ const PostFeatureItem = ({ data }) => {
             date={formatDate}
           ></PostMeta>
         </div>
-        <Link to={data.slug}>
-          <div className="h-full cursor-pointer">
-            <PostTitle size="big" to={data.slug}>
-              {data.title}
-            </PostTitle>
-          </div>
-        </Link>
+        <div className="flex flex-col h-full">
+          <PostTitle size="big" to={data.slug}>
+            {data.title}
+          </PostTitle>
+          <Link to={data.slug} className="flex-1"></Link>
+        </div>
       </div>
     </PostFeatureItemStyles>
   );
