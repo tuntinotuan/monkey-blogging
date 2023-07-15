@@ -1,30 +1,13 @@
 import Heading from "components/layout/Heading";
 import Layout from "components/layout/Layout";
+import { db } from "firebase-app/firebase-config";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Help from "module/help/Help";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { helpStatus } from "utils/constants";
 
-const dataFakeHelp = [
-  {
-    question: "How do I get my posts approved?",
-    answer:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi, aliquam hic voluptates explicabo consequ untur et deserunt magniveritatis harum nisi odit architecto qui sit maiores incidunt ratione repellendus soluta assumenda.",
-  },
-  {
-    question: "How long do I have access?",
-    answer:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi, aliquam hic voluptates explicabo consequ untur et deserunt magniveritatis harum nisi odit architecto qui sit maiores incidunt ratione repellendus soluta assumenda.",
-  },
-  {
-    question: "Where can I download all versions?",
-    answer:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi, aliquam hic voluptates explicabo consequ untur et deserunt magniveritatis harum nisi odit architecto qui sit maiores incidunt ratione repellendus soluta assumenda.",
-  },
-  {
-    question: "How many times will I be charged?",
-    answer:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi, aliquam hic voluptates explicabo consequ untur et deserunt magniveritatis harum nisi odit architecto qui sit maiores incidunt ratione repellendus soluta assumenda.",
-  },
-];
 const dataImgBelow = [
   {
     url: "https://images.unsplash.com/photo-1618218168350-6e7c81151b64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
@@ -40,12 +23,35 @@ const dataImgBelow = [
   },
 ];
 const HelpPage = () => {
+  const [helpData, setHelpData] = useState([]);
+  console.log("data", helpData);
+  useEffect(() => {
+    async function fetchDataHelp() {
+      const colRef = collection(db, "helps");
+      const docQuery = query(
+        colRef,
+        where("status", "==", helpStatus.APPROVED)
+      );
+      onSnapshot(docQuery, (snapshot) => {
+        let results = [];
+        snapshot.forEach((doc) => {
+          results.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setHelpData(results);
+      });
+    }
+    fetchDataHelp();
+  }, []);
+
   return (
     <Layout>
       <div className="container">
         <Heading>How can we help you?</Heading>
-        {dataFakeHelp &&
-          dataFakeHelp.map((data, index) => (
+        {helpData &&
+          helpData.map((data, index) => (
             <Help
               data={data}
               key={data.question}
