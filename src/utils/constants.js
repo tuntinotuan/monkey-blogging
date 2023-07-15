@@ -31,6 +31,10 @@ export const userRole = {
   MOD: 2,
   USER: 3,
 };
+export const helpStatus = {
+  APPROVED: 1,
+  UNAPPROVED: 2,
+};
 
 // Image default -> Sunflower
 export const imageSunflower =

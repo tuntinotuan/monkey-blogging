@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import {
   categoryStatus,
+  helpStatus,
   postStatus,
   userRole,
   userStatus,
@@ -28,6 +29,9 @@ const DashboardPage = () => {
 
   const [sizeCategory, setSizeCategory] = useState();
   const [approvedCategory, setApprovedCategory] = useState();
+
+  const [sizeHelp, setSizeHelp] = useState();
+  const [approvedHelp, setApprovedHelp] = useState();
   useEffect(() => {
     async function fetchDataPost() {
       const colRef = collection(db, "posts");
@@ -114,6 +118,23 @@ const DashboardPage = () => {
       });
     }
     fetchDataCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    async function fetchDataHelp() {
+      const colRef = collection(db, "helps");
+      const queryApproved = query(
+        colRef,
+        where("status", "==", helpStatus.APPROVED)
+      );
+      onSnapshot(colRef, (doc) => {
+        setSizeHelp(doc.size);
+      });
+      onSnapshot(queryApproved, (doc) => {
+        setApprovedHelp(doc.size);
+      });
+    }
+    fetchDataHelp();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -228,6 +249,30 @@ const DashboardPage = () => {
             children="Unapproved"
             textColor="text-red-500"
             figures={sizeCategory - approvedCategory}
+            to=""
+          ></StatusItem>
+        </CardStatus>
+      </DashboardMainItem>
+      <DashboardMainItem title="Help">
+        <CardOverview
+          bgColor="bg-gradient-to-tl from-[#50489E] to-[#368DC2]"
+          size={sizeHelp}
+          text="Current Help"
+          to="/manage/help"
+        ></CardOverview>
+        <CardStatus
+          bgColor="bg-gradient-to-tl from-[#A040BD] to-[#B73E8D]"
+          title="Status Help"
+        >
+          <StatusItem
+            textColor="text-green-500"
+            figures={approvedHelp}
+            to=""
+          ></StatusItem>
+          <StatusItem
+            children="Unapproved"
+            textColor="text-red-500"
+            figures={sizeHelp - approvedHelp}
             to=""
           ></StatusItem>
         </CardStatus>

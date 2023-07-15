@@ -22,6 +22,9 @@ const UserAddNew = React.lazy(() => import("module/user/UserAddNew"));
 const PostAddNew = React.lazy(() => import("module/post/PostAddNew"));
 const PostManage = React.lazy(() => import("module/post/PostManage"));
 const DashboardPage = React.lazy(() => import("pages/DashboardPage"));
+const HelpManage = React.lazy(() => import("module/help/HelpManage"));
+const HelpAddNew = React.lazy(() => import("module/help/HelpAddNew"));
+const HelpUpdate = React.lazy(() => import("module/help/HelpUpdate"));
 const DashboardLayout = React.lazy(() =>
   import("module/dashboard/DashboardLayout")
 );
@@ -118,6 +121,18 @@ function App() {
               <Route
                 path="/manage/update-user"
                 element={<UserUpdate></UserUpdate>}
+              ></Route>
+              <Route
+                path="/manage/help"
+                element={<HelpManage></HelpManage>}
+              ></Route>
+              <Route
+                path="/manage/add-help"
+                element={<HelpAddNew></HelpAddNew>}
+              ></Route>
+              <Route
+                path="/manage/update-help"
+                element={<HelpUpdate></HelpUpdate>}
               ></Route>
               <Route
                 path="/profile"
