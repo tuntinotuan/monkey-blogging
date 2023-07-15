@@ -4,6 +4,8 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const AuthorBox = ({ userId = "" }) => {
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const AuthorBox = ({ userId = "" }) => {
           className="author-name dark:text-white cursor-pointer"
           onClick={() => navigate(`/author/${userData?.username}`)}
         >
-          {userData?.fullname || "User"}
+          {userData?.map || "User"}
         </h3>
         <p className="author-desc dark:text-darkTextA0">
           {userData?.description ||
@@ -46,4 +48,6 @@ const AuthorBox = ({ userId = "" }) => {
   );
 };
 
-export default AuthorBox;
+export default withErrorBoundary(AuthorBox, {
+  FallbackComponent: ErrorFallback,
+});

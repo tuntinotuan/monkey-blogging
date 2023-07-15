@@ -4,6 +4,8 @@ import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 const PostNewestItemStyles = styled.div`
   display: flex;
   align-items: center;
@@ -55,4 +57,6 @@ const PostNewestItem = ({ data }) => {
   );
 };
 
-export default PostNewestItem;
+export default withErrorBoundary(PostNewestItem, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const CardStatus = ({ bgColor, title, children }) => {
   return (
@@ -23,4 +25,6 @@ CardStatus.defaultProps = {
   title: "Status Any",
 };
 
-export default CardStatus;
+export default withErrorBoundary(CardStatus, {
+  FallbackComponent: ErrorFallback,
+});

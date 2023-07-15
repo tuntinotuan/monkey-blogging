@@ -1,5 +1,7 @@
 import React from "react";
 import { DropdownProvider } from "./dropdown-context";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const Dropdown = ({ children, ...props }) => {
   return (
@@ -9,4 +11,6 @@ const Dropdown = ({ children, ...props }) => {
   );
 };
 
-export default Dropdown;
+export default withErrorBoundary(Dropdown, {
+  FallbackComponent: ErrorFallback,
+});

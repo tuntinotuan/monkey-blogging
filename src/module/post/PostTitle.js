@@ -1,4 +1,6 @@
+import { ErrorFallback } from "components/error";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -30,4 +32,6 @@ const PostTitle = ({ children, className = "", size = "normal", to = "" }) => {
   );
 };
 
-export default PostTitle;
+export default withErrorBoundary(PostTitle, {
+  FallbackComponent: ErrorFallback,
+});

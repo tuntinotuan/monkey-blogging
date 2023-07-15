@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const LabelStyles = styled.label`
   color: ${(props) => props.theme.grayDark};
@@ -26,4 +28,6 @@ Label.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-export default Label;
+export default withErrorBoundary(Label, {
+  FallbackComponent: ErrorFallback,
+});

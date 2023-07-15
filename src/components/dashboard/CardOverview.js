@@ -3,6 +3,8 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const CardOverview = ({ bgColor, size, text, to }) => {
   const [hover, setHover] = useState(false);
@@ -47,4 +49,6 @@ CardOverview.defaultProps = {
   to: "/",
 };
 
-export default CardOverview;
+export default withErrorBoundary(CardOverview, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
+import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
 import { NotFoundData } from "components/notfound";
@@ -20,6 +21,7 @@ import {
 import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
@@ -188,4 +190,6 @@ const CategoryManage = () => {
   );
 };
 
-export default CategoryManage;
+export default withErrorBoundary(CategoryManage, {
+  FallbackComponent: ErrorFallback,
+});

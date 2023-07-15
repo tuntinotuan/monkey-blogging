@@ -1,6 +1,8 @@
+import { ErrorFallback } from "components/error";
 import { auth } from "firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 const SidebarStyles = styled.div`
@@ -180,4 +182,6 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default withErrorBoundary(Sidebar, {
+  FallbackComponent: ErrorFallback,
+});

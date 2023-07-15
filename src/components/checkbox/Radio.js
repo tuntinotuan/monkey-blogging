@@ -1,6 +1,8 @@
 import React from "react";
 import { useController } from "react-hook-form";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const Radio = ({ checked, children, control, name, ...rest }) => {
   const { field } = useController({
@@ -36,4 +38,6 @@ Radio.propTypes = {
   name: PropTypes.string,
 };
 
-export default Radio;
+export default withErrorBoundary(Radio, {
+  FallbackComponent: ErrorFallback,
+});

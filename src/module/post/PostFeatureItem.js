@@ -6,6 +6,8 @@ import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
 import slugify from "slugify";
 import { Link } from "react-router-dom";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -87,4 +89,6 @@ const PostFeatureItem = ({ data }) => {
   );
 };
 
-export default PostFeatureItem;
+export default withErrorBoundary(PostFeatureItem, {
+  FallbackComponent: ErrorFallback,
+});

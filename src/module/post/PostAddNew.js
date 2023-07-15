@@ -24,6 +24,8 @@ import { db } from "firebase-app/firebase-config";
 import { useAuth } from "contexts/auth-context";
 import { toast } from "react-toastify";
 import DashboardHeading from "module/dashboard/DashboardHeading";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const PostAddNewStyles = styled.div``;
 
@@ -238,4 +240,6 @@ const PostAddNew = () => {
   );
 };
 
-export default PostAddNew;
+export default withErrorBoundary(PostAddNew, {
+  FallbackComponent: ErrorFallback,
+});

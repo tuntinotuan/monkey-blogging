@@ -6,6 +6,8 @@ import Sidebar from "./Sidebar";
 import { useAuth } from "contexts/auth-context";
 import PageNotFound from "pages/PageNotFound";
 import { ButtonToTop } from "components/button";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 const DashboardStyles = styled.div`
   max-width: 1600px;
   margin: 0 auto;
@@ -47,4 +49,6 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default withErrorBoundary(DashboardLayout, {
+  FallbackComponent: ErrorFallback,
+});

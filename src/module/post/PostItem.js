@@ -5,6 +5,8 @@ import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
 import PageNotFound from "pages/PageNotFound";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 const PostItemStyles = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,4 +50,6 @@ const PostItem = ({ data = [] }) => {
   );
 };
 
-export default PostItem;
+export default withErrorBoundary(PostItem, {
+  FallbackComponent: ErrorFallback,
+});

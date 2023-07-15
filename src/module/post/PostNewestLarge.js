@@ -5,6 +5,8 @@ import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
 import slugify from "slugify";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 const PostNewestLargeStyles = styled.div`
   .post {
     &-image {
@@ -43,4 +45,6 @@ const PostNewestLarge = ({ data }) => {
   );
 };
 
-export default PostNewestLarge;
+export default withErrorBoundary(PostNewestLarge, {
+  FallbackComponent: ErrorFallback,
+});

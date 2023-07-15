@@ -1,5 +1,7 @@
+import { ErrorFallback } from "components/error";
 import Heading from "components/layout/Heading";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 
 const DashboardMainItemStyles = styled.div``;
@@ -13,4 +15,6 @@ const DashboardMainItem = ({ title = "Any", children, ...props }) => {
   );
 };
 
-export default DashboardMainItem;
+export default withErrorBoundary(DashboardMainItem, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,3 +1,4 @@
+import { ErrorFallback } from "components/error";
 import Heading from "components/layout/Heading";
 import { db } from "firebase-app/firebase-config";
 import {
@@ -12,6 +13,7 @@ import PostNewestLarge from "module/post/PostNewestLarge";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 
 const HomeNewestStyles = styled.div`
@@ -70,4 +72,6 @@ const HomeNewest = () => {
   );
 };
 
-export default HomeNewest;
+export default withErrorBoundary(HomeNewest, {
+  FallbackComponent: ErrorFallback,
+});

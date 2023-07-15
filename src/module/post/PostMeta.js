@@ -1,4 +1,6 @@
+import { ErrorFallback } from "components/error";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -37,4 +39,6 @@ const PostMeta = ({
   );
 };
 
-export default PostMeta;
+export default withErrorBoundary(PostMeta, {
+  FallbackComponent: ErrorFallback,
+});

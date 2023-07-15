@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import Input from "./Input";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const InputPasswordToggle = ({ control, ...props }) => {
   const [togglePassword, setTogglePassword] = useState(false);
@@ -24,4 +26,6 @@ const InputPasswordToggle = ({ control, ...props }) => {
   );
 };
 
-export default InputPasswordToggle;
+export default withErrorBoundary(InputPasswordToggle, {
+  FallbackComponent: ErrorFallback,
+});

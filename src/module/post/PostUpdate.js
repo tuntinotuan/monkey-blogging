@@ -31,6 +31,8 @@ import { useMemo } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageUploader from "quill-image-uploader";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 Quill.register("modules/imageUploader", ImageUploader);
 
 const PostUpdate = () => {
@@ -273,4 +275,6 @@ const PostUpdate = () => {
   );
 };
 
-export default PostUpdate;
+export default withErrorBoundary(PostUpdate, {
+  FallbackComponent: ErrorFallback,
+});

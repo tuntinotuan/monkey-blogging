@@ -1,4 +1,6 @@
+import { ErrorFallback } from "components/error";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 
 const DashboardHeading = ({ title = "", desc = "", children }) => {
   return (
@@ -12,4 +14,6 @@ const DashboardHeading = ({ title = "", desc = "", children }) => {
   );
 };
 
-export default DashboardHeading;
+export default withErrorBoundary(DashboardHeading, {
+  FallbackComponent: ErrorFallback,
+});

@@ -3,6 +3,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const ButtonStyles = styled.button`
   cursor: pointer;
@@ -82,4 +84,6 @@ Button.propTypes = {
   kind: PropTypes.oneOf(["secondary", "ghost", "primary"]),
 };
 
-export default Button;
+export default withErrorBoundary(Button, {
+  FallbackComponent: ErrorFallback,
+});

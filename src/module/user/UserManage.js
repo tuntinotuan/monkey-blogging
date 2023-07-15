@@ -3,6 +3,8 @@ import React from "react";
 import UserTable from "./UserTable";
 import { Button } from "components/button";
 import { useAuth } from "contexts/auth-context";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const UserManage = () => {
   const { userInfo } = useAuth();
@@ -19,4 +21,6 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default withErrorBoundary(UserManage, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,5 +1,6 @@
 import { Button } from "components/button";
 import { Radio } from "components/checkbox";
+import { ErrorFallback } from "components/error";
 import { Field, FieldCheckboxes } from "components/field";
 import ImageUpload from "components/image/ImageUpload";
 import { Input } from "components/input";
@@ -11,6 +12,7 @@ import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useEffect } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -219,4 +221,6 @@ const UserUpdate = () => {
   );
 };
 
-export default UserUpdate;
+export default withErrorBoundary(UserUpdate, {
+  FallbackComponent: ErrorFallback,
+});

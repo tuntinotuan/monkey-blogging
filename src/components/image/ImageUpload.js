@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const ImageUpload = (props) => {
   const {
@@ -79,4 +81,6 @@ ImageUpload.propTypes = {
   handleDeleteImage: PropTypes.func,
 };
 
-export default ImageUpload;
+export default withErrorBoundary(ImageUpload, {
+  FallbackComponent: ErrorFallback,
+});

@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { db } from "firebase-app/firebase-config";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const PostRelated = ({ categoryId, postCurrentTitle }) => {
   const [data, setData] = useState([]);
@@ -38,4 +40,6 @@ const PostRelated = ({ categoryId, postCurrentTitle }) => {
   );
 };
 
-export default PostRelated;
+export default withErrorBoundary(PostRelated, {
+  FallbackComponent: ErrorFallback,
+});

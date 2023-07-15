@@ -1,8 +1,10 @@
 import { Button } from "components/button";
+import { ErrorFallback } from "components/error";
 import { IconSearch } from "components/icon";
 import { useAuth } from "contexts/auth-context";
 import { debounce } from "lodash";
 import React, { useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -143,4 +145,6 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withErrorBoundary(Header, {
+  FallbackComponent: ErrorFallback,
+});

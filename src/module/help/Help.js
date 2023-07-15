@@ -1,5 +1,7 @@
+import { ErrorFallback } from "components/error";
 import { IconArrowDown } from "components/icon";
 import React, { useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 
 const Help = ({ data = [], initialize = false }) => {
   const [on, setOn] = useState(initialize);
@@ -28,4 +30,6 @@ const Help = ({ data = [], initialize = false }) => {
   );
 };
 
-export default Help;
+export default withErrorBoundary(Help, {
+  FallbackComponent: ErrorFallback,
+});

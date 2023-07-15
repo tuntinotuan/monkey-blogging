@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { IconCloud, IconStar } from "components/icon";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const ToggleDarkModeV2 = (props) => {
   const { on, onClick, ...rest } = props;
@@ -133,4 +135,6 @@ ToggleDarkModeV2.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default ToggleDarkModeV2;
+export default withErrorBoundary(ToggleDarkModeV2, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const Toggle = (props) => {
   const { on, onClick, ...rest } = props;
@@ -34,4 +36,6 @@ Toggle.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default Toggle;
+export default withErrorBoundary(Toggle, {
+  FallbackComponent: ErrorFallback,
+});

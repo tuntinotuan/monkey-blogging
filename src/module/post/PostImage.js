@@ -1,4 +1,6 @@
+import { ErrorFallback } from "components/error";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -28,4 +30,6 @@ const PostImage = ({ url = "", alt = "unsplash", className = "", to = "" }) => {
   );
 };
 
-export default PostImage;
+export default withErrorBoundary(PostImage, {
+  FallbackComponent: ErrorFallback,
+});

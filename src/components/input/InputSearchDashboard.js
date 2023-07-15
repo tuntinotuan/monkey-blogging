@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const InputSearchDashboard = ({
   className,
@@ -24,4 +26,6 @@ InputSearchDashboard.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default InputSearchDashboard;
+export default withErrorBoundary(InputSearchDashboard, {
+  FallbackComponent: ErrorFallback,
+});

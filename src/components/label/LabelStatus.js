@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const LabelStatusStyles = styled.span`
   display: inline-block;
@@ -38,4 +40,7 @@ LabelStatus.propTypes = {
   children: PropTypes.node,
   type: PropTypes.oneOf(["default", "success", "warning", "danger"]).isRequired,
 };
-export default LabelStatus;
+
+export default withErrorBoundary(LabelStatus, {
+  FallbackComponent: ErrorFallback,
+});

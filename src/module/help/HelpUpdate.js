@@ -1,5 +1,6 @@
 import { Button } from "components/button";
 import { Radio } from "components/checkbox";
+import { ErrorFallback } from "components/error";
 import { Field, FieldCheckboxes } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
@@ -8,6 +9,7 @@ import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useEffect } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -113,4 +115,6 @@ const HelpUpdate = () => {
   );
 };
 
-export default HelpUpdate;
+export default withErrorBoundary(HelpUpdate, {
+  FallbackComponent: ErrorFallback,
+});

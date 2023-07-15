@@ -25,6 +25,8 @@ import { Button } from "components/button";
 import { debounce } from "lodash";
 import { NotFoundData } from "components/notfound";
 import { InputSearchDashboard } from "components/input";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const USER_PER_PAGE = 5;
 
@@ -207,4 +209,6 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default withErrorBoundary(UserTable, {
+  FallbackComponent: ErrorFallback,
+});

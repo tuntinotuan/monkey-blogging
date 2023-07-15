@@ -2,6 +2,8 @@ import React from "react";
 import { useController } from "react-hook-form";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const InputStyles = styled.div`
   position: relative;
@@ -67,4 +69,6 @@ Input.propTypes = {
   control: PropTypes.any.isRequired,
 };
 
-export default Input;
+export default withErrorBoundary(Input, {
+  FallbackComponent: ErrorFallback,
+});

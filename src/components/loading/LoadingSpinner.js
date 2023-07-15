@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const SpinnerStyles = styled.div`
   z-index: 1000;
@@ -39,4 +41,6 @@ LoadingSpinner.propTypes = {
   borderColor: PropTypes.string,
 };
 
-export default LoadingSpinner;
+export default withErrorBoundary(LoadingSpinner, {
+  FallbackComponent: ErrorFallback,
+});

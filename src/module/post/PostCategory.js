@@ -1,4 +1,6 @@
+import { ErrorFallback } from "components/error";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -34,4 +36,6 @@ const PostCategory = ({
   );
 };
 
-export default PostCategory;
+export default withErrorBoundary(PostCategory, {
+  FallbackComponent: ErrorFallback,
+});

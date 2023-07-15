@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "components/error";
 
 const ButtonToTopStyles = styled.button`
   position: fixed;
@@ -85,4 +87,6 @@ ButtonToTop.defaultProps = {
   kind: "default",
 };
 
-export default ButtonToTop;
+export default withErrorBoundary(ButtonToTop, {
+  FallbackComponent: ErrorFallback,
+});

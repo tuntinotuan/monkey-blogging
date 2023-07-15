@@ -1,8 +1,10 @@
 import { Button } from "components/button";
+import { ErrorFallback } from "components/error";
 import ToggleDarkModeV2 from "components/toggle/ToggleDarkModeV2";
 import { useAuth } from "contexts/auth-context";
 import useDarkMode from "hooks/useDarkMode";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { imageSunflower } from "utils/constants";
@@ -45,4 +47,6 @@ const DashboardHeader = () => {
   );
 };
 
-export default DashboardHeader;
+export default withErrorBoundary(DashboardHeader, {
+  FallbackComponent: ErrorFallback,
+});

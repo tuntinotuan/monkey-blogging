@@ -1,3 +1,4 @@
+import { ErrorFallback } from "components/error";
 import Heading from "components/layout/Heading";
 import { db } from "firebase-app/firebase-config";
 import {
@@ -9,6 +10,7 @@ import {
 } from "firebase/firestore";
 import PostFeatureItem from "module/post/PostFeatureItem";
 import React, { useEffect, useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 const HomeFeatureStyles = styled.div``;
 
@@ -48,4 +50,6 @@ const HomeFeature = () => {
   );
 };
 
-export default HomeFeature;
+export default withErrorBoundary(HomeFeature, {
+  FallbackComponent: ErrorFallback,
+});

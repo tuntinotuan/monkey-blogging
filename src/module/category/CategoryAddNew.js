@@ -1,5 +1,6 @@
 import { Button } from "components/button";
 import { Radio } from "components/checkbox";
+import { ErrorFallback } from "components/error";
 import { Field, FieldCheckboxes } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
@@ -7,6 +8,7 @@ import { db } from "firebase-app/firebase-config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -120,4 +122,6 @@ const CategoryAddNew = () => {
   );
 };
 
-export default CategoryAddNew;
+export default withErrorBoundary(CategoryAddNew, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,6 +1,8 @@
 import { Button } from "components/button";
+import { ErrorFallback } from "components/error";
 import { useAuth } from "contexts/auth-context";
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import styled from "styled-components";
 
 const HomeBannerStyles = styled.div`
@@ -65,4 +67,6 @@ const HomeBanner = () => {
   );
 };
 
-export default HomeBanner;
+export default withErrorBoundary(HomeBanner, {
+  FallbackComponent: ErrorFallback,
+});

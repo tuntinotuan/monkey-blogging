@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit } from "components/action";
 import { Button } from "components/button";
+import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
 import { NotFoundData } from "components/notfound";
@@ -22,6 +23,7 @@ import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { helpStatus } from "utils/constants";
@@ -188,4 +190,6 @@ const HelpManage = () => {
   );
 };
 
-export default HelpManage;
+export default withErrorBoundary(HelpManage, {
+  FallbackComponent: ErrorFallback,
+});
