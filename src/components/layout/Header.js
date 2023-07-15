@@ -1,6 +1,7 @@
 import { Button } from "components/button";
 import { ErrorFallback } from "components/error";
 import { IconSearch } from "components/icon";
+import { ImageAvatar } from "components/image";
 import { useAuth } from "contexts/auth-context";
 import { debounce } from "lodash";
 import React, { useState } from "react";
@@ -134,6 +135,7 @@ const Header = () => {
               <strong className="text-primary">
                 {getLastName(userInfo?.displayName)}
               </strong>
+              <ImageAvatar></ImageAvatar>
               <Button height="56px" to="/dashboard">
                 Dashboard
               </Button>
