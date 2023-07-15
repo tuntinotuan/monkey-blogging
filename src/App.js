@@ -7,6 +7,7 @@ import useDarkMode from "hooks/useDarkMode";
 const HomePage = React.lazy(() => import("pages/HomePage"));
 const SearchPage = React.lazy(() => import("pages/SearchPage"));
 const ContactPage = React.lazy(() => import("pages/ContactPage"));
+const HelpPage = React.lazy(() => import("pages/HelpPage"));
 const SignInPage = React.lazy(() => import("pages/SignInPage"));
 const SignUpPage = React.lazy(() => import("pages/SignUpPage"));
 const PageNotFound = React.lazy(() => import("pages/PageNotFound"));
@@ -56,6 +57,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<HomePage></HomePage>}></Route>
+            <Route path="/help" element={<HelpPage></HelpPage>}></Route>
             <Route
               path="/contact"
               element={<ContactPage></ContactPage>}

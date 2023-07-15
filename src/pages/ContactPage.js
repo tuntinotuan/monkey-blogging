@@ -43,6 +43,7 @@ const ContactPage = () => {
       fullname: "",
       email: "",
       phonenumber: "",
+      company: "",
       description: "",
     },
   });
@@ -61,7 +62,13 @@ const ContactPage = () => {
         createdAt: serverTimestamp(),
       });
       toast.success("Submit contact successfully!");
-      reset({ fullname: "", email: "", phonenumber: "", description: "" });
+      reset({
+        fullname: "",
+        email: "",
+        phonenumber: "",
+        company: "",
+        description: "",
+      });
     } catch (error) {
       toast.error(error);
     }
@@ -117,7 +124,14 @@ const ContactPage = () => {
                   placeholder="Enter your phone number"
                 ></Input>
               </Field>
-              <Field></Field>
+              <Field>
+                <Label htmlFor="company">Company</Label>
+                <Input
+                  control={control}
+                  name="company"
+                  placeholder="Enter your company name"
+                ></Input>
+              </Field>
             </div>
             <Field>
               <Label htmlFor="description">Description</Label>
