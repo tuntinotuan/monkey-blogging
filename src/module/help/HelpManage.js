@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit } from "components/action";
 import { Button } from "components/button";
+import { Dropdown } from "components/dropdown";
 import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
@@ -24,13 +25,15 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { withErrorBoundary } from "react-error-boundary";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { helpStatus } from "utils/constants";
 
 const HELP_PER_PAGE = 5;
 
 const HelpManage = () => {
+  const [params] = useSearchParams();
+  const getFilterStatus = params.get("status");
   const { userInfo } = useAuth();
   const [helpList, setHelpList] = useState([]);
   const [helpFilter, setHelpFilter] = useState("");
@@ -38,11 +41,24 @@ const HelpManage = () => {
   const [total, setTotal] = useState("");
   const navigate = useNavigate();
   const handleLoadMoreCategory = async () => {
-    const next = query(
-      collection(db, "helps"),
-      startAfter(currentDocument),
-      limit(HELP_PER_PAGE)
-    );
+    const next = !getFilterStatus
+      ? query(
+          collection(db, "helps"),
+          startAfter(currentDocument),
+          limit(HELP_PER_PAGE)
+        )
+      : query(
+          collection(db, "helps"),
+          startAfter(currentDocument),
+          limit(HELP_PER_PAGE),
+          where(
+            "status",
+            "==",
+            getFilterStatus === "unapproved"
+              ? helpStatus.UNAPPROVED
+              : helpStatus.APPROVED
+          )
+        );
     onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
@@ -67,13 +83,43 @@ const HelpManage = () => {
             where("question", ">=", helpFilter),
             where("question", "<=", helpFilter + "utf8")
           )
+        : getFilterStatus
+        ? query(
+            colRef,
+            limit(HELP_PER_PAGE),
+            where(
+              "status",
+              "==",
+              getFilterStatus === "unapproved"
+                ? helpStatus.UNAPPROVED
+                : helpStatus.APPROVED
+            )
+          )
         : query(colRef, limit(HELP_PER_PAGE));
+      if (getFilterStatus) {
+        onSnapshot(
+          query(
+            colRef,
+            where(
+              "status",
+              "==",
+              getFilterStatus === "unapproved"
+                ? helpStatus.UNAPPROVED
+                : helpStatus.APPROVED
+            )
+          ),
+          (snapshot) => {
+            setTotal(snapshot.size);
+          }
+        );
+      } else {
+        onSnapshot(colRef, (snapshot) => {
+          setTotal(snapshot.size);
+        });
+      }
       const documentSnapshots = await getDocs(newRef);
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      onSnapshot(colRef, (snapshot) => {
-        setTotal(snapshot.size);
-      });
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -87,7 +133,7 @@ const HelpManage = () => {
       setCurrentdocument(lastVisible);
     }
     fetchData();
-  }, [helpFilter]);
+  }, [helpFilter, getFilterStatus]);
   const handleDeleteHelp = async (helpId, helpName) => {
     const colRef = doc(db, "helps", helpId);
     Swal.fire({
@@ -116,7 +162,49 @@ const HelpManage = () => {
           Create Help
         </Button>
       </DashboardHeading>
-      <div className="flex justify-end my-5">
+      <div className="flex justify-end gap-4 my-5">
+        <div className="w-40">
+          <Dropdown>
+            <Dropdown.Select
+              placeholder={getFilterStatus || "Normal"}
+              padding={3}
+              arrowSize="5"
+            ></Dropdown.Select>
+            <Dropdown.List>
+              {!getFilterStatus ? (
+                <>
+                  <Dropdown.Option
+                    onClick={() => navigate("/manage/help?status=approved")}
+                  >
+                    Approved
+                  </Dropdown.Option>
+                  <Dropdown.Option
+                    onClick={() => navigate("/manage/help?status=unapproved")}
+                  >
+                    Unapproved
+                  </Dropdown.Option>
+                </>
+              ) : getFilterStatus === "unapproved" ? (
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/help?status=approved")}
+                >
+                  Approved
+                </Dropdown.Option>
+              ) : (
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/help?status=unapproved")}
+                >
+                  Unapproved
+                </Dropdown.Option>
+              )}
+              {getFilterStatus && (
+                <Dropdown.Option onClick={() => navigate("/manage/help")}>
+                  Normal
+                </Dropdown.Option>
+              )}
+            </Dropdown.List>
+          </Dropdown>
+        </div>
         <InputSearchDashboard
           placeholder="Search help..."
           onChange={handleSearchHelp}

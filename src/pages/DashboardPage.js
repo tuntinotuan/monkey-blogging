@@ -267,13 +267,13 @@ const DashboardPage = () => {
           <StatusItem
             textColor="text-green-500"
             figures={approvedHelp}
-            to=""
+            to="manage/help?status=approved"
           ></StatusItem>
           <StatusItem
             children="Unapproved"
             textColor="text-red-500"
             figures={sizeHelp - approvedHelp}
-            to=""
+            to="manage/help?status=unapproved"
           ></StatusItem>
         </CardStatus>
       </DashboardMainItem>
