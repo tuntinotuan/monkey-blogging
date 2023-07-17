@@ -5,18 +5,18 @@ import { withErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "components/error";
 
 const Checkbox = ({ checked, children, control, name, ...rest }) => {
-  const { field } = useController({
-    control,
-    name,
-    defaultValue: "",
-  });
+  // const { field } = useController({
+  //   control,
+  //   name,
+  //   defaultValue: "",
+  // });
   return (
     <label>
       <input
         checked={checked}
         type="checkbox"
         className="hidden-input"
-        {...field}
+        // {...field}
         {...rest}
       />
       <div className="flex items-center gap-x-3 font-medium cursor-pointer">
@@ -40,7 +40,7 @@ const Checkbox = ({ checked, children, control, name, ...rest }) => {
             />
           </svg>
         </div>
-        <span>{children}</span>
+        <span className="dark:text-white">{children}</span>
       </div>
     </label>
   );

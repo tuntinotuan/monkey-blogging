@@ -1,5 +1,6 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
+import { Checkbox } from "components/checkbox";
 import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
@@ -22,13 +23,18 @@ import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { withErrorBoundary } from "react-error-boundary";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postStatus } from "utils/constants";
 
 const POST_PER_PAGE = 5;
 
 const PostManage = () => {
+  const [params] = useSearchParams();
+  const hotPostParams = params.get("hot");
+  const statusPostParams = params.get("status");
+  console.log("hotPostParams", hotPostParams);
+  console.log("statusPostParams", statusPostParams);
   const navigate = useNavigate();
   const { userInfo } = useAuth();
   const [postList, setPostList] = useState([]);
@@ -59,13 +65,21 @@ const PostManage = () => {
   useEffect(() => {
     async function fetchData() {
       const colRef = collection(db, "posts");
+      const paramsRef = query(
+        colRef,
+        limit(POST_PER_PAGE),
+        where("hot", "==", hotPostParams === "true")
+      );
       const newRef = filter
         ? query(
             colRef,
             where("title", ">=", filter),
             where("title", "<=", filter + "utf8")
           )
+        : hotPostParams
+        ? paramsRef
         : query(colRef, limit(POST_PER_PAGE));
+
       const documentSnapshots = await getDocs(newRef);
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -86,7 +100,7 @@ const PostManage = () => {
       setCurrentdocument(lastVisible);
     }
     fetchData();
-  }, [filter]);
+  }, [filter, hotPostParams]);
   const handleDeletePost = async (postId, postTitle) => {
     const colRef = doc(db, "posts", postId);
     Swal.fire({
@@ -119,6 +133,11 @@ const PostManage = () => {
         break;
     }
   };
+  const handleCheckFeature = () => {
+    hotPostParams === "true"
+      ? navigate("/manage/post")
+      : navigate("/manage/post?hot=true");
+  };
   if (userInfo.role === 3) return null;
   return (
     <div>
@@ -126,7 +145,13 @@ const PostManage = () => {
         title="All posts"
         desc="Manage all posts"
       ></DashboardHeading>
-      <div className="flex justify-end my-5">
+      <div className="flex items-center justify-end gap-4 my-5">
+        <Checkbox
+          checked={hotPostParams === "true" && true}
+          onClick={handleCheckFeature}
+        >
+          Feature
+        </Checkbox>
         <InputSearchDashboard
           placeholder="Search post..."
           onChange={handleSearchPost}
@@ -151,11 +176,18 @@ const PostManage = () => {
                   <td>{post.id.slice(0, 5) + "..."}</td>
                   <td>
                     <div className="flex items-center gap-x-3">
-                      <img
-                        src={post.image}
-                        alt=""
-                        className="w-[66px] h-[55px] rounded object-cover"
-                      />
+                      <div className="relative">
+                        <img
+                          src={post.image}
+                          alt=""
+                          className="w-[66px] h-[55px] rounded object-cover"
+                        />
+                        {post.hot && (
+                          <span className="absolute left-0 top-1 bg-gradient-to-br from-[#FE7547] to-[#FA9F4E] px-1 rounded -translate-x-1/2 text-white text-xs">
+                            Feature
+                          </span>
+                        )}
+                      </div>
                       <div className="flex-1">
                         <h3 className="font-semibold max-w-[200px] whitespace-pre-wrap line-clamp-3">
                           {post.title}

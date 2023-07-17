@@ -176,6 +176,7 @@ const DashboardPage = () => {
           bgColor="bg-gradient-to-br from-[#FE7547] to-[#FA9F4E]"
           size={hotPost}
           text="Feature Post"
+          to="/manage/post?hot=true"
         ></CardOverview>
       </DashboardMainItem>
       <DashboardMainItem title="User">
