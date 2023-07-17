@@ -1,6 +1,7 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import { Checkbox } from "components/checkbox";
+import { Dropdown } from "components/dropdown";
 import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
@@ -33,8 +34,6 @@ const PostManage = () => {
   const [params] = useSearchParams();
   const hotPostParams = params.get("hot");
   const statusPostParams = params.get("status");
-  console.log("hotPostParams", hotPostParams);
-  console.log("statusPostParams", statusPostParams);
   const navigate = useNavigate();
   const { userInfo } = useAuth();
   const [postList, setPostList] = useState([]);
@@ -42,11 +41,34 @@ const PostManage = () => {
   const [currentDocument, setCurrentdocument] = useState("");
   const [total, setTotal] = useState(0);
   const handleLoadMorePost = async () => {
-    const next = query(
-      collection(db, "posts"),
-      startAfter(currentDocument),
-      limit(POST_PER_PAGE)
-    );
+    const next =
+      hotPostParams || statusPostParams
+        ? hotPostParams
+          ? query(
+              collection(db, "posts"),
+              startAfter(currentDocument),
+              limit(POST_PER_PAGE),
+              where("hot", "==", hotPostParams === "true")
+            )
+          : query(
+              collection(db, "posts"),
+              startAfter(currentDocument),
+              limit(POST_PER_PAGE),
+              where(
+                "status",
+                "==",
+                statusPostParams === "approved"
+                  ? postStatus.APPROVED
+                  : statusPostParams === "pending"
+                  ? postStatus.PENDING
+                  : postStatus.REJECT
+              )
+            )
+        : query(
+            collection(db, "posts"),
+            startAfter(currentDocument),
+            limit(POST_PER_PAGE)
+          );
     onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
@@ -65,27 +87,60 @@ const PostManage = () => {
   useEffect(() => {
     async function fetchData() {
       const colRef = collection(db, "posts");
-      const paramsRef = query(
-        colRef,
-        limit(POST_PER_PAGE),
-        where("hot", "==", hotPostParams === "true")
-      );
+      const paramsRef = hotPostParams
+        ? query(
+            colRef,
+            limit(POST_PER_PAGE),
+            where("hot", "==", hotPostParams === "true")
+          )
+        : statusPostParams &&
+          query(
+            colRef,
+            limit(POST_PER_PAGE),
+            where(
+              "status",
+              "==",
+              statusPostParams === "approved"
+                ? postStatus.APPROVED
+                : statusPostParams === "pending"
+                ? postStatus.PENDING
+                : postStatus.REJECT
+            )
+          );
       const newRef = filter
         ? query(
             colRef,
             where("title", ">=", filter),
             where("title", "<=", filter + "utf8")
           )
-        : hotPostParams
+        : hotPostParams || statusPostParams
         ? paramsRef
         : query(colRef, limit(POST_PER_PAGE));
-
-      const documentSnapshots = await getDocs(newRef);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      onSnapshot(colRef, (snapshot) => {
-        setTotal(snapshot.size);
-      });
+      const hotSize = query(
+        colRef,
+        where("hot", "==", hotPostParams === "true")
+      );
+      const statusSize = query(
+        colRef,
+        where(
+          "status",
+          "==",
+          statusPostParams === "approved"
+            ? postStatus.APPROVED
+            : statusPostParams === "pending"
+            ? postStatus.PENDING
+            : postStatus.REJECT
+        )
+      );
+      if (hotPostParams || statusPostParams) {
+        onSnapshot(hotPostParams ? hotSize : statusSize, (snapshot) => {
+          setTotal(snapshot.size);
+        });
+      } else {
+        onSnapshot(colRef, (snapshot) => {
+          setTotal(snapshot.size);
+        });
+      }
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -97,10 +152,13 @@ const PostManage = () => {
         if (results.length === 0) setFilter("abc");
         setPostList(results);
       });
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
       setCurrentdocument(lastVisible);
     }
     fetchData();
-  }, [filter, hotPostParams]);
+  }, [filter, hotPostParams, statusPostParams]);
   const handleDeletePost = async (postId, postTitle) => {
     const colRef = doc(db, "posts", postId);
     Swal.fire({
@@ -134,9 +192,17 @@ const PostManage = () => {
     }
   };
   const handleCheckFeature = () => {
-    hotPostParams === "true"
-      ? navigate("/manage/post")
-      : navigate("/manage/post?hot=true");
+    setFilter("");
+    if (hotPostParams === "true") {
+      navigate("/manage/post");
+    } else {
+      navigate("/manage/post?hot=true");
+    }
+  };
+  const handleClickOption = (to) => {
+    setFilter("");
+    if (to === "normal") return navigate("/manage/post");
+    navigate(`/manage/post?status=${to}`);
   };
   if (userInfo.role === 3) return null;
   return (
@@ -152,6 +218,37 @@ const PostManage = () => {
         >
           Feature
         </Checkbox>
+        <div className="w-40">
+          <Dropdown>
+            <Dropdown.Select
+              placeholder={statusPostParams || "Normal"}
+              padding="3"
+              arrowSize="5"
+            ></Dropdown.Select>
+            <Dropdown.List>
+              {statusPostParams !== "approved" && (
+                <Dropdown.Option onClick={() => handleClickOption("approved")}>
+                  Approved
+                </Dropdown.Option>
+              )}
+              {statusPostParams !== "pending" && (
+                <Dropdown.Option onClick={() => handleClickOption("pending")}>
+                  Pending
+                </Dropdown.Option>
+              )}
+              {statusPostParams !== "rejected" && (
+                <Dropdown.Option onClick={() => handleClickOption("rejected")}>
+                  Rejected
+                </Dropdown.Option>
+              )}
+              {statusPostParams && (
+                <Dropdown.Option onClick={() => handleClickOption("normal")}>
+                  Normal
+                </Dropdown.Option>
+              )}
+            </Dropdown.List>
+          </Dropdown>
+        </div>
         <InputSearchDashboard
           placeholder="Search post..."
           onChange={handleSearchPost}

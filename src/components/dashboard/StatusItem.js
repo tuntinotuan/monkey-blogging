@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const StatusItem = ({ children, textColor = "", figures, to = "" }) => {
+const StatusItem = ({ children, textColor = "", figures, to = "/" }) => {
   return (
-    <Link to={`/${to}`} className="relative flex items-center gap-2">
+    <Link to={to} className="relative flex items-center gap-2">
       <StatusChildren
         children={children}
         textColor={textColor}

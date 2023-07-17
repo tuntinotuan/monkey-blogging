@@ -157,19 +157,19 @@ const DashboardPage = () => {
           <StatusItem
             textColor="text-green-500"
             figures={approvedPost}
-            to=""
+            to="/manage/post?status=approved"
           ></StatusItem>
           <StatusItem
             children="Pending"
             textColor="text-orange-500"
             figures={pendingPost}
-            to=""
+            to="/manage/post?status=pending"
           ></StatusItem>
           <StatusItem
-            children="Reject"
+            children="Rejected"
             textColor="text-red-500"
             figures={rejectPost}
-            to=""
+            to="/manage/post?status=rejected"
           ></StatusItem>
         </CardStatus>
         <CardOverview
