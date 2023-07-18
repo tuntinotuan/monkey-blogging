@@ -171,26 +171,14 @@ const HelpManage = () => {
               arrowSize="5"
             ></Dropdown.Select>
             <Dropdown.List>
-              {!getFilterStatus ? (
-                <>
-                  <Dropdown.Option
-                    onClick={() => navigate("/manage/help?status=approved")}
-                  >
-                    Approved
-                  </Dropdown.Option>
-                  <Dropdown.Option
-                    onClick={() => navigate("/manage/help?status=unapproved")}
-                  >
-                    Unapproved
-                  </Dropdown.Option>
-                </>
-              ) : getFilterStatus === "unapproved" ? (
+              {getFilterStatus !== "approved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/help?status=approved")}
                 >
                   Approved
                 </Dropdown.Option>
-              ) : (
+              )}
+              {getFilterStatus !== "unapproved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/help?status=unapproved")}
                 >
