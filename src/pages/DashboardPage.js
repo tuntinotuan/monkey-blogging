@@ -194,19 +194,19 @@ const DashboardPage = () => {
             children="Active"
             textColor="text-green-500"
             figures={activeUser}
-            to=""
+            to="/manage/user?status=active"
           ></StatusItem>
           <StatusItem
             children="Pending"
             textColor="text-orange-500"
             figures={pendingUser}
-            to=""
+            to="/manage/user?status=pending"
           ></StatusItem>
           <StatusItem
             children="Banned"
             textColor="text-red-500"
             figures={sizeUser - activeUser - pendingUser}
-            to=""
+            to="/manage/user?status=banned"
           ></StatusItem>
         </CardStatus>
         <CardStatus title="Role User">
@@ -214,19 +214,19 @@ const DashboardPage = () => {
             children="Admin"
             textColor="text-green-500"
             figures={adminUser}
-            to=""
+            to="/manage/user?role=admin"
           ></StatusItem>
           <StatusItem
             children="Moderator"
             textColor="text-orange-500"
             figures={modUser}
-            to=""
+            to="/manage/user?role=moderator"
           ></StatusItem>
           <StatusItem
             children="User"
             textColor="text-red-500"
             figures={sizeUser - adminUser - modUser}
-            to=""
+            to="/manage/user?role=user"
           ></StatusItem>
         </CardStatus>
       </DashboardMainItem>

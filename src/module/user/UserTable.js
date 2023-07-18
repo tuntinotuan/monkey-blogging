@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { imageSunflower, userRole, userStatus } from "utils/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { Table } from "components/table";
 import { LabelStatus } from "components/label";
@@ -27,21 +27,56 @@ import { NotFoundData } from "components/notfound";
 import { InputSearchDashboard } from "components/input";
 import { withErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "components/error";
+import { Dropdown } from "components/dropdown";
 
 const USER_PER_PAGE = 5;
 
 const UserTable = () => {
+  const [params] = useSearchParams();
+  const statusUserParams = params.get("status");
+  const roleUserParams = params.get("role");
   const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
   const [currentDocument, setCurrentdocument] = useState("");
   const [filter, setFilter] = useState("");
   const [total, setTotal] = useState(0);
   const handleLoadMoreUser = async () => {
-    const next = query(
-      collection(db, "users"),
-      startAfter(currentDocument),
-      limit(USER_PER_PAGE)
-    );
+    const next =
+      statusUserParams || roleUserParams
+        ? statusUserParams
+          ? query(
+              collection(db, "users"),
+              startAfter(currentDocument),
+              limit(USER_PER_PAGE),
+              where(
+                "status",
+                "==",
+                statusUserParams === "active"
+                  ? userStatus.ACTIVE
+                  : statusUserParams === "pending"
+                  ? userStatus.PENDING
+                  : userStatus.BAN
+              )
+            )
+          : query(
+              collection(db, "users"),
+              startAfter(currentDocument),
+              limit(USER_PER_PAGE),
+              where(
+                "role",
+                "==",
+                roleUserParams === "admin"
+                  ? userRole.ADMIN
+                  : roleUserParams === "moderator"
+                  ? userRole.MOD
+                  : userRole.USER
+              )
+            )
+        : query(
+            collection(db, "users"),
+            startAfter(currentDocument),
+            limit(USER_PER_PAGE)
+          );
     onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
@@ -60,19 +95,76 @@ const UserTable = () => {
   useEffect(() => {
     async function fetchDataUser() {
       const colRef = collection(db, "users");
+      const paramsRef = statusUserParams
+        ? query(
+            colRef,
+            limit(USER_PER_PAGE),
+            where(
+              "status",
+              "==",
+              statusUserParams === "active"
+                ? userStatus.ACTIVE
+                : statusUserParams === "pending"
+                ? userStatus.PENDING
+                : userStatus.BAN
+            )
+          )
+        : query(
+            colRef,
+            limit(USER_PER_PAGE),
+            where(
+              "role",
+              "==",
+              roleUserParams === "admin"
+                ? userRole.ADMIN
+                : roleUserParams === "moderator"
+                ? userRole.MOD
+                : userRole.USER
+            )
+          );
       const newRef = filter
         ? query(
             colRef,
             where("fullname", ">=", filter),
             where("fullname", "<=", filter + "utf8")
           )
+        : statusUserParams || roleUserParams
+        ? paramsRef
         : query(colRef, limit(USER_PER_PAGE));
-      const documentSnapshots = await getDocs(newRef);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      onSnapshot(colRef, (snapshot) => {
-        setTotal(snapshot.size);
-      });
+      const statusSize = query(
+        colRef,
+        where(
+          "status",
+          "==",
+          statusUserParams === "active"
+            ? userStatus.ACTIVE
+            : statusUserParams === "pending"
+            ? userStatus.PENDING
+            : userStatus.BAN
+        )
+      );
+      const roleSize = query(
+        colRef,
+        where(
+          "role",
+          "==",
+          roleUserParams === "admin"
+            ? userRole.ADMIN
+            : roleUserParams === "moderator"
+            ? userRole.MOD
+            : userRole.USER
+        )
+      );
+      onSnapshot(
+        statusUserParams || roleUserParams
+          ? statusUserParams
+            ? statusSize
+            : roleSize
+          : colRef,
+        (snapshot) => {
+          setTotal(snapshot.size);
+        }
+      );
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -83,10 +175,13 @@ const UserTable = () => {
         });
         setUserList(results);
       });
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
       setCurrentdocument(lastVisible);
     }
     fetchDataUser();
-  }, [filter]);
+  }, [filter, statusUserParams, roleUserParams]);
   const handleDeleteUser = async (user) => {
     const colRef = doc(db, "users", user.id);
     Swal.fire({
@@ -113,6 +208,14 @@ const UserTable = () => {
   const handleSearchUser = debounce((e) => {
     setFilter(e.target.value);
   }, 500);
+  const handleSelectStatus = (to) => {
+    if (to === "status") return navigate("/manage/user");
+    navigate(`/manage/user?status=${to}`);
+  };
+  const handleSelectRole = (to) => {
+    if (to === "role") return navigate("/manage/user");
+    navigate(`/manage/user?role=${to}`);
+  };
   const renderLabelRole = (role) => {
     switch (role) {
       case userRole.ADMIN:
@@ -132,7 +235,7 @@ const UserTable = () => {
       case userStatus.PENDING:
         return <LabelStatus type="warning">Pending</LabelStatus>;
       case userStatus.BAN:
-        return <LabelStatus type="danger">Rejected</LabelStatus>;
+        return <LabelStatus type="danger">Banned</LabelStatus>;
       default:
         break;
     }
@@ -173,7 +276,69 @@ const UserTable = () => {
   );
   return (
     <div>
-      <div className="flex justify-end my-5">
+      <div className="flex justify-end gap-4 my-5">
+        <div className="w-40">
+          <Dropdown>
+            <Dropdown.Select
+              placeholder={statusUserParams || "Status"}
+              padding={3}
+              arrowSize="5"
+            ></Dropdown.Select>
+            <Dropdown.List>
+              {statusUserParams !== "active" && (
+                <Dropdown.Option onClick={() => handleSelectStatus("active")}>
+                  Active
+                </Dropdown.Option>
+              )}
+              {statusUserParams !== "pending" && (
+                <Dropdown.Option onClick={() => handleSelectStatus("pending")}>
+                  Pending
+                </Dropdown.Option>
+              )}
+              {statusUserParams !== "banned" && (
+                <Dropdown.Option onClick={() => handleSelectStatus("banned")}>
+                  Banned
+                </Dropdown.Option>
+              )}
+              {statusUserParams && (
+                <Dropdown.Option onClick={() => handleSelectStatus("status")}>
+                  Status
+                </Dropdown.Option>
+              )}
+            </Dropdown.List>
+          </Dropdown>
+        </div>
+        <div className="w-40">
+          <Dropdown>
+            <Dropdown.Select
+              placeholder={roleUserParams || "Role"}
+              padding={3}
+              arrowSize="5"
+            ></Dropdown.Select>
+            <Dropdown.List>
+              {roleUserParams !== "admin" && (
+                <Dropdown.Option onClick={() => handleSelectRole("admin")}>
+                  Admin
+                </Dropdown.Option>
+              )}
+              {roleUserParams !== "moderator" && (
+                <Dropdown.Option onClick={() => handleSelectRole("moderator")}>
+                  Moderator
+                </Dropdown.Option>
+              )}
+              {roleUserParams !== "user" && (
+                <Dropdown.Option onClick={() => handleSelectRole("user")}>
+                  User
+                </Dropdown.Option>
+              )}
+              {roleUserParams && (
+                <Dropdown.Option onClick={() => handleSelectRole("role")}>
+                  Role
+                </Dropdown.Option>
+              )}
+            </Dropdown.List>
+          </Dropdown>
+        </div>
         <InputSearchDashboard
           placeholder="Search user..."
           onChange={handleSearchUser}
