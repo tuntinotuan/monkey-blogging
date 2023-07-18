@@ -1,5 +1,6 @@
-import { ActionDelete, ActionEdit, ActionView } from "components/action";
+import { ActionDelete, ActionEdit } from "components/action";
 import { Button } from "components/button";
+import { Dropdown } from "components/dropdown";
 import { ErrorFallback } from "components/error";
 import { InputSearchDashboard } from "components/input";
 import { LabelStatus } from "components/label";
@@ -22,13 +23,15 @@ import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { withErrorBoundary } from "react-error-boundary";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
 const CATEGORY_PER_PAGE = 5;
 
 const CategoryManage = () => {
+  const [params] = useSearchParams();
+  const statusCategoryParams = params.get("status");
   const { userInfo } = useAuth();
   const [categoryList, setCategoryList] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -37,11 +40,24 @@ const CategoryManage = () => {
   const navigate = useNavigate();
 
   const handleLoadMoreCategory = async () => {
-    const next = query(
-      collection(db, "categories"),
-      startAfter(currentDocument),
-      limit(CATEGORY_PER_PAGE)
-    );
+    const next = statusCategoryParams
+      ? query(
+          collection(db, "categories"),
+          startAfter(currentDocument),
+          limit(CATEGORY_PER_PAGE),
+          where(
+            "status",
+            "==",
+            statusCategoryParams === "unapproved"
+              ? categoryStatus.UNAPPROVED
+              : categoryStatus.APPROVED
+          )
+        )
+      : query(
+          collection(db, "categories"),
+          startAfter(currentDocument),
+          limit(CATEGORY_PER_PAGE)
+        );
     onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
@@ -67,13 +83,40 @@ const CategoryManage = () => {
             where("name", ">=", categoryFilter),
             where("name", "<=", categoryFilter + "utf8")
           )
+        : statusCategoryParams
+        ? query(
+            colRef,
+            limit(CATEGORY_PER_PAGE),
+            where(
+              "status",
+              "==",
+              statusCategoryParams === "unapproved"
+                ? categoryStatus.UNAPPROVED
+                : categoryStatus.APPROVED
+            )
+          )
         : query(colRef, limit(CATEGORY_PER_PAGE));
-      const documentSnapshots = await getDocs(newRef);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      onSnapshot(colRef, (snapshot) => {
-        setTotal(snapshot.size);
-      });
+      if (statusCategoryParams) {
+        onSnapshot(
+          query(
+            colRef,
+            where(
+              "status",
+              "==",
+              statusCategoryParams === "unapproved"
+                ? categoryStatus.UNAPPROVED
+                : categoryStatus.APPROVED
+            )
+          ),
+          (snapshot) => {
+            setTotal(snapshot.size);
+          }
+        );
+      } else {
+        onSnapshot(colRef, (snapshot) => {
+          setTotal(snapshot.size);
+        });
+      }
       onSnapshot(newRef, (snapshot) => {
         let results = [];
         snapshot.forEach((doc) => {
@@ -84,10 +127,13 @@ const CategoryManage = () => {
         });
         setCategoryList(results);
       });
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
       setCurrentdocument(lastVisible);
     }
     fetchData();
-  }, [categoryFilter]);
+  }, [categoryFilter, statusCategoryParams]);
   const handleDeleteCategory = async (categoryId, categoryName) => {
     const colRef = doc(db, "categories", categoryId);
     Swal.fire({
@@ -120,7 +166,37 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
-      <div className="flex justify-end my-5">
+      <div className="flex justify-end gap-4 my-5">
+        <div className="w-40">
+          <Dropdown>
+            <Dropdown.Select
+              placeholder={statusCategoryParams || "Normal"}
+              padding={3}
+              arrowSize="5"
+            ></Dropdown.Select>
+            <Dropdown.List>
+              {statusCategoryParams !== "approved" && (
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/category?status=approved")}
+                >
+                  Approved
+                </Dropdown.Option>
+              )}
+              {statusCategoryParams !== "unapproved" && (
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/category?status=unapproved")}
+                >
+                  Unapproved
+                </Dropdown.Option>
+              )}
+              {statusCategoryParams && (
+                <Dropdown.Option onClick={() => navigate("/manage/category")}>
+                  Normal
+                </Dropdown.Option>
+              )}
+            </Dropdown.List>
+          </Dropdown>
+        </div>
         <InputSearchDashboard
           placeholder="Search category..."
           onChange={handleSearchCategory}
@@ -156,7 +232,6 @@ const CategoryManage = () => {
                   </td>
                   <td>
                     <div className="flex gap-3 text-gray-400">
-                      <ActionView></ActionView>
                       <ActionEdit
                         onClick={() =>
                           navigate(`/manage/update-category?id=${category.id}`)

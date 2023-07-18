@@ -244,13 +244,13 @@ const DashboardPage = () => {
           <StatusItem
             textColor="text-green-500"
             figures={approvedCategory}
-            to=""
+            to="/manage/category?status=approved"
           ></StatusItem>
           <StatusItem
             children="Unapproved"
             textColor="text-red-500"
             figures={sizeCategory - approvedCategory}
-            to=""
+            to="/manage/category?status=unapproved"
           ></StatusItem>
         </CardStatus>
       </DashboardMainItem>
