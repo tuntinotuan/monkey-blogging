@@ -166,7 +166,8 @@ const HelpManage = () => {
         <div className="w-40">
           <Dropdown>
             <Dropdown.Select
-              placeholder={getFilterStatus || "Normal"}
+              placeholder={getFilterStatus || "Status"}
+              active={getFilterStatus}
               padding={3}
               arrowSize="5"
             ></Dropdown.Select>
@@ -174,6 +175,7 @@ const HelpManage = () => {
               {getFilterStatus !== "approved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/help?status=approved")}
+                  colorType="approved"
                 >
                   Approved
                 </Dropdown.Option>
@@ -181,13 +183,17 @@ const HelpManage = () => {
               {getFilterStatus !== "unapproved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/help?status=unapproved")}
+                  colorType="unapproved"
                 >
                   Unapproved
                 </Dropdown.Option>
               )}
               {getFilterStatus && (
-                <Dropdown.Option onClick={() => navigate("/manage/help")}>
-                  Normal
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/help")}
+                  className="border border-t-gray-200"
+                >
+                  Status
                 </Dropdown.Option>
               )}
             </Dropdown.List>
@@ -230,7 +236,7 @@ const HelpManage = () => {
                       <LabelStatus type="success">Approved</LabelStatus>
                     )}
                     {Number(help.status) === helpStatus.UNAPPROVED && (
-                      <LabelStatus type="warning">Unapproved</LabelStatus>
+                      <LabelStatus type="danger">Unapproved</LabelStatus>
                     )}
                   </td>
                   <td>

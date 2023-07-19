@@ -221,29 +221,42 @@ const PostManage = () => {
         <div className="w-40">
           <Dropdown>
             <Dropdown.Select
-              placeholder={statusPostParams || "Normal"}
+              placeholder={statusPostParams || "Status"}
+              active={statusPostParams}
               padding="3"
               arrowSize="5"
             ></Dropdown.Select>
             <Dropdown.List>
               {statusPostParams !== "approved" && (
-                <Dropdown.Option onClick={() => handleClickOption("approved")}>
+                <Dropdown.Option
+                  onClick={() => handleClickOption("approved")}
+                  colorType="approved"
+                >
                   Approved
                 </Dropdown.Option>
               )}
               {statusPostParams !== "pending" && (
-                <Dropdown.Option onClick={() => handleClickOption("pending")}>
+                <Dropdown.Option
+                  onClick={() => handleClickOption("pending")}
+                  colorType="pending"
+                >
                   Pending
                 </Dropdown.Option>
               )}
               {statusPostParams !== "rejected" && (
-                <Dropdown.Option onClick={() => handleClickOption("rejected")}>
+                <Dropdown.Option
+                  onClick={() => handleClickOption("rejected")}
+                  colorType="rejected"
+                >
                   Rejected
                 </Dropdown.Option>
               )}
               {statusPostParams && (
-                <Dropdown.Option onClick={() => handleClickOption("normal")}>
-                  Normal
+                <Dropdown.Option
+                  onClick={() => handleClickOption("normal")}
+                  className="border border-t-gray-200"
+                >
+                  Status
                 </Dropdown.Option>
               )}
             </Dropdown.List>

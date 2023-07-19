@@ -170,7 +170,8 @@ const CategoryManage = () => {
         <div className="w-40">
           <Dropdown>
             <Dropdown.Select
-              placeholder={statusCategoryParams || "Normal"}
+              placeholder={statusCategoryParams || "Status"}
+              active={statusCategoryParams}
               padding={3}
               arrowSize="5"
             ></Dropdown.Select>
@@ -178,6 +179,7 @@ const CategoryManage = () => {
               {statusCategoryParams !== "approved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/category?status=approved")}
+                  colorType="approved"
                 >
                   Approved
                 </Dropdown.Option>
@@ -185,13 +187,17 @@ const CategoryManage = () => {
               {statusCategoryParams !== "unapproved" && (
                 <Dropdown.Option
                   onClick={() => navigate("/manage/category?status=unapproved")}
+                  colorType="unapproved"
                 >
                   Unapproved
                 </Dropdown.Option>
               )}
               {statusCategoryParams && (
-                <Dropdown.Option onClick={() => navigate("/manage/category")}>
-                  Normal
+                <Dropdown.Option
+                  onClick={() => navigate("/manage/category")}
+                  className="border border-t-gray-200"
+                >
+                  Status
                 </Dropdown.Option>
               )}
             </Dropdown.List>
@@ -227,7 +233,7 @@ const CategoryManage = () => {
                       <LabelStatus type="success">Approved</LabelStatus>
                     )}
                     {Number(category.status) === categoryStatus.UNAPPROVED && (
-                      <LabelStatus type="warning">Unapproved</LabelStatus>
+                      <LabelStatus type="danger">Unapproved</LabelStatus>
                     )}
                   </td>
                   <td>

@@ -281,27 +281,40 @@ const UserTable = () => {
           <Dropdown>
             <Dropdown.Select
               placeholder={statusUserParams || "Status"}
+              active={statusUserParams}
               padding={3}
               arrowSize="5"
             ></Dropdown.Select>
             <Dropdown.List>
               {statusUserParams !== "active" && (
-                <Dropdown.Option onClick={() => handleSelectStatus("active")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectStatus("active")}
+                  colorType="active"
+                >
                   Active
                 </Dropdown.Option>
               )}
               {statusUserParams !== "pending" && (
-                <Dropdown.Option onClick={() => handleSelectStatus("pending")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectStatus("pending")}
+                  colorType="pending"
+                >
                   Pending
                 </Dropdown.Option>
               )}
               {statusUserParams !== "banned" && (
-                <Dropdown.Option onClick={() => handleSelectStatus("banned")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectStatus("banned")}
+                  colorType="banned"
+                >
                   Banned
                 </Dropdown.Option>
               )}
               {statusUserParams && (
-                <Dropdown.Option onClick={() => handleSelectStatus("status")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectStatus("status")}
+                  className="border border-t-gray-200"
+                >
                   Status
                 </Dropdown.Option>
               )}
@@ -312,27 +325,40 @@ const UserTable = () => {
           <Dropdown>
             <Dropdown.Select
               placeholder={roleUserParams || "Role"}
+              active={roleUserParams}
               padding={3}
               arrowSize="5"
             ></Dropdown.Select>
             <Dropdown.List>
               {roleUserParams !== "admin" && (
-                <Dropdown.Option onClick={() => handleSelectRole("admin")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectRole("admin")}
+                  colorType="admin"
+                >
                   Admin
                 </Dropdown.Option>
               )}
               {roleUserParams !== "moderator" && (
-                <Dropdown.Option onClick={() => handleSelectRole("moderator")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectRole("moderator")}
+                  colorType="moderator"
+                >
                   Moderator
                 </Dropdown.Option>
               )}
               {roleUserParams !== "user" && (
-                <Dropdown.Option onClick={() => handleSelectRole("user")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectRole("user")}
+                  colorType="user"
+                >
                   User
                 </Dropdown.Option>
               )}
               {roleUserParams && (
-                <Dropdown.Option onClick={() => handleSelectRole("role")}>
+                <Dropdown.Option
+                  onClick={() => handleSelectRole("role")}
+                  className="border border-t-gray-200"
+                >
                   Role
                 </Dropdown.Option>
               )}

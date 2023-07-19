@@ -174,6 +174,7 @@ const PostAddNew = () => {
                     <Dropdown.Option
                       key={item.id}
                       onClick={() => handleClickOption(item)}
+                      hoverBg
                     >
                       {item.name}
                     </Dropdown.Option>
