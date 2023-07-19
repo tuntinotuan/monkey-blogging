@@ -5,6 +5,7 @@ import { LoadingSpinner } from "components/loading";
 import { useEffect } from "react";
 import useDarkMode from "hooks/useDarkMode";
 const HomePage = React.lazy(() => import("pages/HomePage"));
+const BlogPage = React.lazy(() => import("pages/BlogPage"));
 const SearchPage = React.lazy(() => import("pages/SearchPage"));
 const ContactPage = React.lazy(() => import("pages/ContactPage"));
 const HelpPage = React.lazy(() => import("pages/HelpPage"));
@@ -60,6 +61,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<HomePage></HomePage>}></Route>
+            <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
             <Route path="/help" element={<HelpPage></HelpPage>}></Route>
             <Route
               path="/contact"
