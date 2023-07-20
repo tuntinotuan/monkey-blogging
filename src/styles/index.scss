@@ -150,3 +150,27 @@ a {
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
+
+// Customize Scrollbar
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track{
+  @apply bg-[#F1F1F1]
+}
+.dark body::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+body::-webkit-scrollbar-thumb{
+  @apply bg-[#3485FE] bg-opacity-50;
+  border-radius: 100rem;
+}
+.dark body::-webkit-scrollbar-thumb{
+  @apply bg-gray-800 bg-opacity-50;
+}
+body::-webkit-scrollbar-thumb:hover {
+  @apply bg-opacity-60;
+}
+body::-webkit-scrollbar-thumb:active {
+  @apply bg-opacity-100;
+}
