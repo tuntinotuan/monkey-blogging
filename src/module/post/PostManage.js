@@ -32,8 +32,9 @@ const POST_PER_PAGE = 5;
 
 const PostManage = () => {
   const [params] = useSearchParams();
-  const hotPostParams = params.get("hot");
-  const statusPostParams = params.get("status");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const hotParams = params.get("hot");
+  const statusParams = params.get("status");
   const navigate = useNavigate();
   const { userInfo } = useAuth();
   const [postList, setPostList] = useState([]);
@@ -41,34 +42,35 @@ const PostManage = () => {
   const [currentDocument, setCurrentdocument] = useState("");
   const [total, setTotal] = useState(0);
   const handleLoadMorePost = async () => {
-    const next =
-      hotPostParams || statusPostParams
-        ? hotPostParams
-          ? query(
-              collection(db, "posts"),
-              startAfter(currentDocument),
-              limit(POST_PER_PAGE),
-              where("hot", "==", hotPostParams === "true")
-            )
-          : query(
-              collection(db, "posts"),
-              startAfter(currentDocument),
-              limit(POST_PER_PAGE),
-              where(
-                "status",
-                "==",
-                statusPostParams === "approved"
-                  ? postStatus.APPROVED
-                  : statusPostParams === "pending"
-                  ? postStatus.PENDING
-                  : postStatus.REJECT
-              )
-            )
-        : query(
-            collection(db, "posts"),
+    const colRef = collection(db, "posts");
+    const hotNextQuery = query(
+      colRef,
+      startAfter(currentDocument),
+      limit(POST_PER_PAGE),
+      hotWhere
+    );
+    const statusNextQuery = query(
+      colRef,
+      startAfter(currentDocument),
+      limit(POST_PER_PAGE),
+      statusWhere
+    );
+    const paramsQuery =
+      hotParams && statusParams
+        ? query(
+            colRef,
             startAfter(currentDocument),
-            limit(POST_PER_PAGE)
-          );
+            limit(POST_PER_PAGE),
+            hotWhere,
+            statusWhere
+          )
+        : hotParams
+        ? hotNextQuery
+        : statusNextQuery;
+    const next =
+      hotParams || statusParams
+        ? paramsQuery
+        : query(colRef, startAfter(currentDocument), limit(POST_PER_PAGE));
     onSnapshot(next, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {
@@ -84,56 +86,43 @@ const PostManage = () => {
       documentSnapshots.docs[documentSnapshots.docs.length - 1];
     setCurrentdocument(lastVisible);
   };
+  const hotWhere = where("hot", "==", hotParams === "true");
+  const statusWhere = where(
+    "status",
+    "==",
+    statusParams === "approved"
+      ? postStatus.APPROVED
+      : statusParams === "pending"
+      ? postStatus.PENDING
+      : postStatus.REJECT
+  );
   useEffect(() => {
     async function fetchData() {
       const colRef = collection(db, "posts");
-      const paramsRef = hotPostParams
-        ? query(
-            colRef,
-            limit(POST_PER_PAGE),
-            where("hot", "==", hotPostParams === "true")
-          )
-        : statusPostParams &&
-          query(
-            colRef,
-            limit(POST_PER_PAGE),
-            where(
-              "status",
-              "==",
-              statusPostParams === "approved"
-                ? postStatus.APPROVED
-                : statusPostParams === "pending"
-                ? postStatus.PENDING
-                : postStatus.REJECT
-            )
-          );
+      const filterQuery = query(
+        colRef,
+        where("title", ">=", filter),
+        where("title", "<=", filter + "utf8")
+      );
+      const paramsQuery =
+        hotParams && statusParams
+          ? query(colRef, limit(POST_PER_PAGE), hotWhere, statusWhere)
+          : hotParams
+          ? query(colRef, limit(POST_PER_PAGE), hotWhere)
+          : query(colRef, limit(POST_PER_PAGE), statusWhere);
       const newRef = filter
-        ? query(
-            colRef,
-            where("title", ">=", filter),
-            where("title", "<=", filter + "utf8")
-          )
-        : hotPostParams || statusPostParams
-        ? paramsRef
+        ? filterQuery
+        : hotParams || statusParams
+        ? paramsQuery
         : query(colRef, limit(POST_PER_PAGE));
-      const hotSize = query(
-        colRef,
-        where("hot", "==", hotPostParams === "true")
-      );
-      const statusSize = query(
-        colRef,
-        where(
-          "status",
-          "==",
-          statusPostParams === "approved"
-            ? postStatus.APPROVED
-            : statusPostParams === "pending"
-            ? postStatus.PENDING
-            : postStatus.REJECT
-        )
-      );
-      if (hotPostParams || statusPostParams) {
-        onSnapshot(hotPostParams ? hotSize : statusSize, (snapshot) => {
+      const sizeRef =
+        hotParams && statusParams
+          ? query(colRef, hotWhere, statusWhere)
+          : hotParams
+          ? query(colRef, hotWhere)
+          : query(colRef, statusWhere);
+      if (hotParams || statusParams) {
+        onSnapshot(sizeRef, (snapshot) => {
           setTotal(snapshot.size);
         });
       } else {
@@ -158,7 +147,8 @@ const PostManage = () => {
       setCurrentdocument(lastVisible);
     }
     fetchData();
-  }, [filter, hotPostParams, statusPostParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, hotParams, statusParams]);
   const handleDeletePost = async (postId, postTitle) => {
     const colRef = doc(db, "posts", postId);
     Swal.fire({
@@ -193,16 +183,21 @@ const PostManage = () => {
   };
   const handleCheckFeature = () => {
     setFilter("");
-    if (hotPostParams === "true") {
-      navigate("/manage/post");
+    if (searchParams.has("hot")) {
+      searchParams.delete("hot");
     } else {
-      navigate("/manage/post?hot=true");
+      searchParams.append("hot", true);
     }
+    setSearchParams(searchParams);
   };
   const handleClickOption = (to) => {
     setFilter("");
-    if (to === "normal") return navigate("/manage/post");
-    navigate(`/manage/post?status=${to}`);
+    if (to === "status" && searchParams.has("status")) {
+      searchParams.delete("status");
+    } else {
+      searchParams.set("status", to);
+    }
+    setSearchParams(searchParams);
   };
   if (userInfo.role === 3) return null;
   return (
@@ -213,7 +208,7 @@ const PostManage = () => {
       ></DashboardHeading>
       <div className="flex items-center justify-end gap-4 my-5">
         <Checkbox
-          checked={hotPostParams === "true" && true}
+          checked={hotParams === "true" && true}
           onClick={handleCheckFeature}
         >
           Feature
@@ -221,13 +216,13 @@ const PostManage = () => {
         <div className="w-40">
           <Dropdown>
             <Dropdown.Select
-              placeholder={statusPostParams || "Status"}
-              active={statusPostParams}
+              placeholder={statusParams || "Status"}
+              active={statusParams}
               padding="3"
               arrowSize="5"
             ></Dropdown.Select>
             <Dropdown.List>
-              {statusPostParams !== "approved" && (
+              {statusParams !== "approved" && (
                 <Dropdown.Option
                   onClick={() => handleClickOption("approved")}
                   colorType="approved"
@@ -235,7 +230,7 @@ const PostManage = () => {
                   Approved
                 </Dropdown.Option>
               )}
-              {statusPostParams !== "pending" && (
+              {statusParams !== "pending" && (
                 <Dropdown.Option
                   onClick={() => handleClickOption("pending")}
                   colorType="pending"
@@ -243,7 +238,7 @@ const PostManage = () => {
                   Pending
                 </Dropdown.Option>
               )}
-              {statusPostParams !== "rejected" && (
+              {statusParams !== "rejected" && (
                 <Dropdown.Option
                   onClick={() => handleClickOption("rejected")}
                   colorType="rejected"
@@ -251,9 +246,9 @@ const PostManage = () => {
                   Rejected
                 </Dropdown.Option>
               )}
-              {statusPostParams && (
+              {statusParams && (
                 <Dropdown.Option
-                  onClick={() => handleClickOption("normal")}
+                  onClick={() => handleClickOption("status")}
                   className="border border-t-gray-200"
                 >
                   Status
