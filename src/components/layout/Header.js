@@ -1,12 +1,11 @@
 import { Button } from "components/button";
 import { ErrorFallback } from "components/error";
-import { IconSearch } from "components/icon";
 import { ImageAvatar } from "components/image";
+import { InputSearchHeader } from "components/input";
 import { useAuth } from "contexts/auth-context";
-import { debounce } from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { withErrorBoundary } from "react-error-boundary";
-import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const menuLinks = [
@@ -77,15 +76,6 @@ function getLastName(name) {
 
 const Header = () => {
   const { userInfo } = useAuth();
-  const [params] = useSearchParams();
-  const keywordSearch = params.get("keyword");
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState("");
-  const SearchKeywordHandler = debounce((e) => {
-    if (filter === "") return;
-    if (e.type !== "click" && e.key !== "Enter") return;
-    navigate(`/search?keyword=${filter}`);
-  }, 500);
   return (
     <HeaderStyles>
       <div className="container">
@@ -109,22 +99,7 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          <div className="search dark:bg-gray-800 dark:!border-none">
-            <input
-              type="text"
-              className="search-input dark:bg-gray-800 dark:text-white dark:outline-gray-800"
-              placeholder="Search posts..."
-              defaultValue={keywordSearch}
-              onChange={(e) => setFilter(e.target.value)}
-              onKeyDown={SearchKeywordHandler}
-            />
-            <span
-              className="search-icon cursor-pointer"
-              onClick={SearchKeywordHandler}
-            >
-              <IconSearch></IconSearch>
-            </span>
-          </div>
+          <InputSearchHeader></InputSearchHeader>
           {!userInfo ? (
             <Button style={{ maxWidth: 150 }} height="56px" to={"/sign-up"}>
               Sign Up
