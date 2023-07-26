@@ -6,7 +6,8 @@ import IconMoon from "./IconMoon";
 import IconStar from "./IconStar";
 import IconCloud from "./IconCloud";
 import IconDocument from "./IconDocument";
-import IconLongArrow from "./IconLongArrow";
+import IconLongArrowLeft from "./IconLongArrowLeft";
+import IconLongArrowRight from "./IconLongArrowRight";
 import IconArrowDown from "./IconArrowDown";
 
 export {
@@ -18,6 +19,7 @@ export {
   IconStar,
   IconCloud,
   IconDocument,
-  IconLongArrow,
+  IconLongArrowLeft,
+  IconLongArrowRight,
   IconArrowDown,
 };

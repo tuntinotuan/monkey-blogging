@@ -1,4 +1,4 @@
-import { IconDocument, IconLongArrow } from "components/icon";
+import { IconDocument, IconLongArrowLeft } from "components/icon";
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,11 +13,12 @@ const CardOverview = ({ bgColor, size, text, to }) => {
       className={`flex flex-col justify-between w-full h-[200px] text-white rounded-3xl transition-all p-7 ${bgColor}`}
     >
       <div className="flex items-start justify-between p-0">
-        <IconLongArrow
+        <IconLongArrowLeft
           className={`transition-all ${
             hover ? "customize-bounce opacity-100" : "opacity-0"
           }`}
-        ></IconLongArrow>
+          size={12}
+        ></IconLongArrowLeft>
         <Link
           to={to}
           className={`flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-xl`}

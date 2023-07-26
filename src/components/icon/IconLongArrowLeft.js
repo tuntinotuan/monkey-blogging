@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconLongArrow = ({ className, onClick = () => {} }) => {
+const IconLongArrowLeft = ({ className, onClick = () => {}, size = 6 }) => {
   return (
     <span className={`relative ${className}`} onClick={onClick}>
       <svg
@@ -9,7 +9,7 @@ const IconLongArrow = ({ className, onClick = () => {} }) => {
         viewBox="0 0 24 24"
         strokeWidth="0.6"
         stroke="currentColor"
-        className="w-12 h-12"
+        className={`w-${size} h-${size}`}
       >
         <path
           strokeLinecap="round"
@@ -21,4 +21,4 @@ const IconLongArrow = ({ className, onClick = () => {} }) => {
   );
 };
 
-export default IconLongArrow;
+export default IconLongArrowLeft;
