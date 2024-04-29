@@ -3,7 +3,6 @@ import Layout from "components/layout/Layout";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
-  endBefore,
   getDocs,
   limit,
   onSnapshot,
@@ -17,7 +16,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { postStatus } from "utils/constants";
 
-const BLOG_PER_PAGE = 2;
+const BLOG_PER_PAGE = 1;
 
 const BlogPage = () => {
   const [postList, setPostList] = useState([]);
@@ -26,6 +25,16 @@ const BlogPage = () => {
   const [totalPostCalled, setTotalPostCalled] = useState(0);
   const [temporarily, setTemporarily] = useState(0);
   const handleLoadOlderPosts = async () => {
+    console.log(
+      totalPostCalled &&
+        postList[postList.length - 1] ===
+          totalPostCalled[totalPostCalled.length - 1]
+    );
+    // if (
+    //   !totalPostCalled &&
+    //   postList[postList.length - 1] !==
+    //     totalPostCalled[totalPostCalled.length - 1]
+    // ) {
     const colRef = collection(db, "posts");
     const next = query(
       colRef,
@@ -49,9 +58,14 @@ const BlogPage = () => {
     const lastVisible =
       documentSnapshots.docs[documentSnapshots.docs.length - 1];
     setCurrentdoc(lastVisible);
+    // } else {
+    //   console.log("Call api");
+    // }
   };
   const handleLoadNewerPosts = async () => {
     // const arr = ["Apple", "Orange", "Banana", "Watermelon", "Cherry"];
+    // const arr1 = ["Apple", "Orange", "Banana", "Cherry"];
+    // console.log(arr[arr.length - 1] === arr1[arr1.length - 1]);
     // const changeArr = arr.splice(arr.length - 3, 3);
     // const getLastArr = arr.splice(arr.length - 2, 2);
     // console.log("arr", arr);

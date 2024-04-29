@@ -17,7 +17,7 @@ const CardOverview = ({ bgColor, size, text, to }) => {
           className={`transition-all ${
             hover ? "customize-bounce opacity-100" : "opacity-0"
           }`}
-          size={12}
+          size={10}
         ></IconLongArrowLeft>
         <Link
           to={to}
